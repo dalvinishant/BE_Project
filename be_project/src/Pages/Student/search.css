@@ -1,0 +1,297 @@
+html, body {
+  height: 100%;
+  min-height: 100%;
+  background-image: url(./Assets/Icon/background.png);
+  background-size: contain;
+  background-color: rgba(255, 255, 255, 0.5);
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+}
+
+.centered {
+  height: 100vh; /* Magic here */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  #title{
+    font-family: "Exo 2";
+    font-weight: 700;
+  }
+
+  .form-control {
+    font-family: "Exo 2";
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  #input_search{
+    outline:none;
+    font-family: "Exo 2";
+  }
+  #search_bar:hover {
+    border: 1px solid #2b2b2b;
+  }
+
+  .active-pink-4 input[type=text]:focus:not([readonly]) {
+    font-family: "Exo 2";
+    font-size: 20px;
+    font-weight: 500;
+    box-shadow: 0 0 0 1px #4e4a4a;
+  }
+
+  hr
+  {
+    text-align:left;
+  }
+
+  #mic, #filter{
+  
+    outline:none;
+    
+  }
+  
+  #service:hover
+  {
+    font-weight: 700;
+  }
+  #service:focus
+  {
+    background-color: transparent;
+    padding: 3px;
+    border-radius: 2px;
+    outline:none;
+    color: blue;
+  }
+
+.font_custom{
+  font-family: "Exo 2";
+}
+.rightpane {
+  width: 30%;
+  height: 100%;
+  float: right;
+  border-collapse: collapse;
+}  
+
+.reservePane {
+  height: 100%;
+  float: right;
+  border-collapse: collapse;
+}
+
+.leftpane {
+  width: 30%;
+  height: 100%;
+  float: left;
+  border-collapse: collapse;
+}
+
+@media screen and (max-width: 1024px) {
+  .leftpane, .rightpane{
+    display:none;
+  }
+}
+
+#middlePane {
+  width:50%;
+}
+
+@media screen and (max-width:1024px) {
+  #middlePane {
+    width:100%;
+    margin: 15px;
+  }
+
+  #resultDisplay {
+    width:100% !important;
+  }
+}
+
+#leftpane {
+  vertical-align: middle;
+}
+
+#studentDetails {
+  border-collapse: collapse;
+  width: 100%;
+  
+}
+
+#studentDetails td {
+  padding: 2px;
+  padding-left: 10px;
+  text-align: left;
+  border-radius:"3px";
+  margin-top: "20px"; 
+  border-radius:"10px";
+  background: "#f2f2f2";
+}
+
+#studentDetails tr {
+  border-bottom:"1px solid #ffffff";
+}
+
+#studentDetails td:nth-child(odd){
+  width: 40%;
+}
+
+#studentDetails td {
+  border-right:"1px solid #ffffff";
+}
+
+#studentDetails tr:hover {background-color: #ddd;}
+
+#chat_button{
+  background-color: #000000;
+  background-image: linear-gradient(147deg, #000000 0%, #434343 74%);
+  outline: none;
+  border:none;
+}
+
+#exam_feed:hover{
+  background-color: #ddd;
+  border-radius:"15px";
+}
+
+#db_books{
+  display: flex;
+  flex-direction: column;
+ 
+  width: 100%;
+}
+
+#searchDiv ul,li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.searchList {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.searchResultDetails {
+  display: flex;
+}
+
+.searchList-item {
+	display: flex; 
+  padding: 0.5em;
+	width: 100%;
+}
+
+@media all and (min-width: 40em) {
+  .searchList-item {
+    width: 50%;
+  }
+}
+
+.modal-content
+{
+  border-radius: 15px !important;
+}
+.qr{
+  border-radius:20px;
+}
+
+.download{
+  display: flex;
+}
+
+
+#123456{
+  height:10%;
+  width:50%;
+  
+}
+
+.sc-chat-window {
+  opacity: 0.97 !important;
+}
+
+.sc-header {
+  background: #f2f2f2 !important;
+  opacity: 0.9;
+  color: #2b2b2b !important;
+}
+
+.sc-message-list {
+
+}
+
+.sc-user-input {
+  background-color: #f3f3f3 !important;
+  color: #000000 !important;
+}
+
+.sc-header--close-button img {
+  display: none;
+}
+
+.sc-header--close-button:hover {
+  display: none;
+}
+
+.sc-launcher {
+  background-color: #696969 !important;
+  box-shadow: 0px 0px 15px !important;
+  opacity: 0.8 !important;
+}
+
+.sc-message--content.sent .sc-message--text {
+  background-color: #696969 !important;
+}
+
+.searchList-content {
+  background-color: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  width: 100%;
+  border-radius: 10px;
+}
+
+#reserveButton {
+  background-color: #4e4a4a;
+  border-radius: 10px;
+}
+
+#actionIcons td{
+  text-align:center;
+}
+
+
+.mobileReserved {
+  display: none;
+}
+
+@media screen and (max-width:1024px) {
+  .mobileReserved{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  
+  .headerDiv {
+    display: none;
+  }
+}
+
+.mobileReservedContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.mobileDisplayReserved {
+  border-radius: 20px;
+}
+
+.mobileDisplayResDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

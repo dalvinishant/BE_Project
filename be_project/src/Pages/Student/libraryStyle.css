@@ -1,0 +1,7 @@
+.mainDivision {
+    background-image: url(./Assets/Icon/background.png);
+    background-size: contain;
+    background-color: rgba(255, 255, 255, 0.5);
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+}

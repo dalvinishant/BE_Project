@@ -1,0 +1,11 @@
+React Package Installations
+    1. React Bootstrap : npm install react-bootstrap bootstrap
+    2. React Router : npm install react-router-dom
+    3. React MDB :npm install --save mdbreact
+    4. http-proxy-middlware: npm i http-proxy-middleware
+    5. QR : npm install react-qr-code, npm install qrcode.react
+    6. ART : npm install react-art, npm install react-art-svg-renderer
+    7. CHART WINDOW: npm install react-chat-window
+    8. QR Scannre: npm install react-qr-reader
+    9. Download Button: npm install react-download-link
+    10. Chat Bot: npm install react-simple-chatbot

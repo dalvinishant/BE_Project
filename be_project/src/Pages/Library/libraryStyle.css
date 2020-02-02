@@ -1,0 +1,245 @@
+body {
+    background-image: url(./Assets/Icon/background.png);
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 100vh;
+    background-attachment: fixed;
+}
+
+.mainDivision {
+    display: flex;
+    flex-direction: row;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+}
+.profile{
+    display:flex;
+    flex-wrap:wrap;
+}
+
+
+#db_books{
+    display: flex;
+    flex-direction: column;
+   
+    width: 100%;
+  }
+  
+  /* #searchDiv ul,li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .searchList {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .searchResultDetails {
+    display: flex;
+  }
+  
+  .searchList-item {
+      display: flex; 
+    padding: 0.5em;
+      width: 100%;
+  } */ */
+.profile-data{
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+    justify-content: space-around;
+    border-radius: 15px !important;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px
+}
+#profile-data{
+    border-radius: 10px !important;
+}
+
+.leftpane {
+    width: 30%;
+    height: 100%;
+    float: left;
+    border-collapse: collapse;
+  }
+.img-title{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        
+        align-content: stretch;
+    
+}
+.logo {
+    display: flex;
+    flex-wrap: no-wrap;
+    flex-direction: row;
+    align-items: center;
+    
+}
+
+.selfInformation {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.actionView .qrActionView {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 15px !important;
+}
+
+.libraryActions {
+    display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	align-items: center;
+    align-content: stretch;
+}
+
+.add_book
+{
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+.actionBox:hover{
+    border:1px solid #2b2b2b;
+    
+    
+}
+
+#action_button:hover{
+    background: none;
+}
+
+.actionBox img {
+    width: 80px;
+}
+.column{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.row{
+    display: flex;
+    flex-direction: column;
+	flex-wrap: no-wrap;
+}
+
+
+.closeItem, .addItemDiv {
+    display: flex;
+}
+
+.MuiInputLabel-outlined.MuiInputLabel-shrink{
+    color:#2b2b2b !important;
+    background-color: #f2f2f2 !important;
+    transform: translate(14px, -6px) scale(0.89) !important;
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
+
+
+.Mui:focus{
+    border-color:#2b2b2b;
+}
+.badge {
+    
+    position: relative;
+    top: -53px;
+    right: -113px;
+    height: 20px;
+    width: 20px;
+    border-radius: 50% !important;
+    background-color: #ef5350;
+    color: white;
+  }
+
+  .modal-open {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .transactionActionButtons, .inventoryActionButtons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+  }
+
+.transactionBox, .inventoryBox {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    width: 28%;
+    border-radius: 10px;
+    
+}
+
+.inventoryBox {
+    width: 49%
+}
+
+.transactionBox h6 {
+    color: #6a6a6a;
+}
+
+.inventoryBox_selected{
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    width: 49%;
+    /* height:scale(1.2); */
+    border-radius: 10px;
+    background-image: linear-gradient(147deg, #000000 0%, #434343 74%);
+    color:#fafafa;
+}
+
+.functionModal {
+    width:50% !important;
+    height:50% !important;
+    vertical-align: middle;
+}
+
+.qrInfo {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.qrInfoDiv {
+    display: flex;
+    
+}
+
+.modal {
+    overflow: hidden;
+}
+
+.modal-dialog {
+    vertical-align: middle;
+}
+
+#root {
+    height: 100vh;
+}
+
+.transactionBox_selected{
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    /* width: 49%; */
+    /* height:scale(1.2); */
+    border-radius: 10px;
+    background-image: linear-gradient(147deg, #000000 0%, #434343 74%);
+    color:#fafafa;
+}

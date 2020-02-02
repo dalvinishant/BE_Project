@@ -1,0 +1,34 @@
+        return (
+            <div className=" font_custom">  
+                {
+                    this.state.books.items.map((book, index) => {
+                    return (
+                        <div key={index}>
+                            <center>
+                            <div className="font_custom shadow w-25"style={{borderRadius:"30px"}}>
+                                <table>
+                                    <tr>
+                                        <td width = "40%">
+                                            <center>
+                                            <img width="50%" height="50%" src={`http://books.google.com/books/content?id=${book.id}&printsec=frontcover&img=1&zoom=1&source=gbs_api`} />
+                                            </center>
+                                        </td>
+                                        <td width= "60%" style= {{textAlign:'left'}}>
+                                            <table>
+                                            <h7 className="font_custom" >{ book.volumeInfo.title }</h7>
+                                            <tr>
+                                                <p>{ this.bookAuthors(book.volumeInfo.authors) }</p>
+                                                <p>{book.volumeInfo.publishedDate}</p>
+                                            </tr>
+                                            </table> 
+                                        </td>    
+                                    </tr>           
+                                </table>
+                            </div>
+                            </center>
+                        </div>
+                    );
+                })
+                }
+            </div>
+        )
