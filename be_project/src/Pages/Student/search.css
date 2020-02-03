@@ -113,13 +113,13 @@ html, body {
   vertical-align: middle;
 }
 
-#studentDetails {
+#studentDetails, #grievanceDetails {
   border-collapse: collapse;
   width: 100%;
   
 }
 
-#studentDetails td {
+#studentDetails td, #grievanceDetails td {
   padding: 2px;
   padding-left: 10px;
   text-align: left;
@@ -129,7 +129,7 @@ html, body {
   background: "#f2f2f2";
 }
 
-#studentDetails tr {
+#studentDetails tr, #grievanceDetails tr {
   border-bottom:"1px solid #ffffff";
 }
 
@@ -137,11 +137,15 @@ html, body {
   width: 40%;
 }
 
-#studentDetails td {
+#studentDetails td, #grievanceDetails td {
   border-right:"1px solid #ffffff";
 }
 
-#studentDetails tr:hover {background-color: #ddd;}
+#studentDetails tr:hover, #grievanceDetails tr:hover {background-color: #ddd;}
+
+#grievanceDetails td:nth-child(odd){
+  width: 30%;
+}
 
 #chat_button{
   background-color: #000000;
@@ -294,4 +298,8 @@ html, body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.image-upload>input {
+  display: none;
 }

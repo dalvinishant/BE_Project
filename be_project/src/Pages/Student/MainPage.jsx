@@ -1,8 +1,8 @@
 //Imports
 import React, { useState,Component, useEffect } from 'react';
-import bootstrap from 'react-bootstrap';
 import { Button } from 'react-bootstrap'
 import mdb from 'mdbreact';
+import { MDBFileInput } from "mdbreact";
 import './search.css'
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -16,6 +16,8 @@ import CustomChatbot from './customChatBot'
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import Center from 'react-center';
 
 //Import images
 import MicIcon from '@material-ui/icons/Mic';
@@ -29,7 +31,7 @@ import contract from './Assets/Icon/contract.svg';
 import history from './Assets/Icon/history.svg';
 import ruppee from './Assets/Icon/ruppee.png';
 import voice_search from './Assets/Icon/voice-search.svg';
-import logo from './Assets/Icon/BRAIT_Transparent_1.png';
+import logo from './Assets/Icon/logo_i2it_2.png';
 import ray from './Assets/ray.JPG';
 import nocover from './Assets/No_Cover.jpg';
 import tfios from './Assets/thefault.jpg';
@@ -38,7 +40,7 @@ import { withStyles } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import checklist from './Assets/Icon/checklist.svg';
 import chaticon from './Assets/Icon/comment.png';
-
+//import clip from './Assets/Icon/paperclip.png'
 
 
 import Search_Result from './SearchResult'
@@ -51,7 +53,6 @@ recognition.interimResults = true
 recognition.lang = 'en-US'
 
 const styles = theme => ({
-    border:"2px solid #2b2b2b",
     notchedOutline: {
        borderWidth: "1px",
        borderColor: "#2b2b2b !important"
@@ -61,6 +62,17 @@ const styles = theme => ({
        width: "2px",
     }
  });
+
+ const theme=createMuiTheme({
+    overrides: {
+        MuiAutocomplete: {
+            notchedOutline: {
+                borderWidth: "1px",
+                borderColor: "#2b2b2b !important"
+             }
+        }
+    }
+ })
 
  const categories = [
     { title: 'Biographies and Memoirs'},
@@ -85,6 +97,16 @@ class Student_MainPage extends Component{
             setModalShow:true,
             searchTerm : '  ',
             setSearchTerm: '',
+            grievance : 
+            {
+                studentid:1345,
+                title:'',
+                category:'',
+                subcategory:'',
+                description:'',
+                files:['file1', 'file2'],
+                action:[]
+            },
             go:false,
             listening: false,
             term:'',
@@ -92,11 +114,78 @@ class Student_MainPage extends Component{
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange_category = this.handleChange_category.bind(this);
+        this.handleChange_sub_category = this.handleChange_sub_category.bind(this);
+
         this.toggleListen = this.toggleListen.bind(this);
         this.handleListen = this.handleListen.bind(this);
         this.handleChange_voice=this.handleChange_voice.bind(this);
+        this.submit = this.submit.bind(this);
     }
     
+///////////////////////////////////////////////////////////New Functions
+
+
+
+handleChange_title(e)
+{
+    // console.log(this.state.grievance.sub_category);
+    // console.log(this.state.grievance.title);
+    this.state.grievance.title = e.target.value;        
+    
+}
+handleChange_category(e)
+{
+    // console.log(this.state.grievance.category);
+    this.state.grievance.category = e.target.value;     
+    
+}
+handleChange_sub_category(e)
+{
+    this.state.grievance.sub_category = e.target.value;     
+    // console.log(this.state.grievance.sub_category);
+    
+}
+handleChange_description(e)
+{
+    // console.log(this.state.grievance.description);
+    this.state.grievance.description = e.target.value; 
+    
+}
+
+submit()
+{
+    console.log(this.state.grievance)
+    const options = {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        data: this.state.grievance,
+        url:'http://127.0.0.1:5000/student/124'
+      }
+  
+      console.log("Sending Query: "+String(this.state.grievance.title));
+     //  console.log(this.send_book[0])
+      var result = axios(options).then(res=>{
+           console.log('Posted');
+           console.log(res.data);
+      }).catch(error=>{
+        console.log('Not Posted');
+        console.log(error.response)
+      })
+      this.state.go=true;
+}
+
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////New Functions ends
 
     // setModalShow(){
     //     this.setState({
@@ -213,7 +302,7 @@ class Student_MainPage extends Component{
         {
             return(
                 <Redirect to={{
-                    pathname: "/Search_Result",
+                    pathname: "/",
                     state:{searchTerm:searchTerm}
                 }}/>
             )
@@ -259,37 +348,47 @@ class Student_MainPage extends Component{
                             </table>
                         </center>
                     
-                    <div id="recommendations" >
+                    <div id="actions" >
                         <hr/>
                         <h5 className = "font_custom" style={{textAlign:"left",paddingLeft:"20px"}}>
-                                <b>Recommendations</b>
+                                <b>Actions</b>
                         </h5>
                         <hr />
-                        <table>
-                            <tr>
-                                <td className="p-2">
-                                    <img className="shadow" style={{width:"60px", height:"60px", borderRadius:"70%"}} src={nocover}/>
+                        <table id="grievanceDetails">
+                            <tr onClick={this.toggleModalShow.bind(this)}>
+                                <td className="p-2" style={{textAlign:"center", width:"30%"}}>
+                                    <img src={trending}  style = {{height : "40px",width :"40px"}} 
+                                       ></img>
                                 </td>
                                 <td className="p-2">
-                                <tr><strong><h6><b>Gone Girl</b></h6></strong></tr>
-                                    <tr><h7>Gillian Flynn</h7></tr>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="p-2">
-                                    <img className="shadow" style={{width:"60px", height:"60px", borderRadius:"70%"}} src={tfios}/>
-                                </td>
-                                <td className="p-2">
-                                    <tr><strong><h6><b>The Fault in our Stars</b></h6></strong></tr>
-                                    <tr><h7>John Green</h7></tr>
+                                <tr><strong><h6 style={{fontSize:"18px"}}><b>View Grievances</b></h6></strong></tr>
+                                    <tr><h7>View all submitted grievances</h7></tr>
                                 </td>
                             </tr>
+                            <tr onClick={this.toggleModalShow.bind(this)}>
+                                <td className="p-2" style={{textAlign:"center"}}>
+                                <img src={trending}  style = {{height : "40px",width :"40px"}} 
+                                       ></img>
+                                </td>
+                                <td className="p-2">
+                                    <tr><strong><h6 style={{fontSize:"18px"}}><b>Response</b></h6></strong></tr>
+                                    <tr><h7>View the responses for submitted grivances</h7></tr>
+                                </td>
+                            </tr> <tr onClick={this.toggleModalShow.bind(this)}>
+                                <td className="p-2" style={{textAlign:"center"}}>
+                                    <img src={trending}  style = {{height : "40px",width :"40px"}} 
+                                       ></img>
+                                </td>
+                                <td className="p-2">
+                                <tr><strong><h6 style={{fontSize:"18px"}}><b>Debared Grievances</b></h6></strong></tr>
+                                    <tr><h7>View the debared grievances</h7></tr>
+                                </td>
+                            </tr>
+                            
                         </table>
+                        
                         <hr/>
                     </div>
-                    <Button className="w-75" id = "chat_button" style= {{textTransform:"none"}}>
-                        Chat
-                    </Button>
                     </div>
                 </center>
             </div>
@@ -300,82 +399,113 @@ class Student_MainPage extends Component{
                     <tr>
                         <td><img style={{width:"100px",verticalAlign:"center",}}src={logo}/></td>
                         <td>
-                            <h2 style={{verticalAlign:"center", textAlign:"left",marginLeft:"20px", marginTop:"10px"}} id='title'>Dr. B. R. Ambedkar<br/>Institute of Technology</h2>
+                            <h2 style={{verticalAlign:"center", textAlign:"left",marginLeft:"20px", marginTop:"10px"}} id='title'>International Institute of<br/>Information Technology</h2>
                             <div style = {{borderTop:"2px solid #ff0000", width:'70%', marginLeft : '20px'}}>
-                            <h4 id = "title" style = {{ marginTop:"1px"}}> Library</h4>
+                            <h4 id = "title" style = {{ marginTop:"1px"}}> Grievance Portal</h4>
                             </div>
                         </td>
                     </tr>
                 </table>
                 </center>
                 <mdb md="6">
-                    <div>
-                        {/* <div className="w-50"> */}
-                    <form onSubmit = {this.handleSubmit} > 
-                        <table className = "w-100">
-                            <tr>
-                            <div id='search_bar' className="mb-4 w-100 shadow-lg w-responsive mx-auto mt-4 rounded-pill" style = {{ backgroundColor:"#ffffff"}}>
-                                <td width="92%">
-                                <input name="input_search" id="input_search" defaultValue={term} type="text" placeholder="Search" onChange = {this.handleChange} contentEditable='true' aria-label="Search" style={{fontSize: '20px',border:"0px",paddingLeft:"30px",height: '70px',backgroundColor:"transparent", outlineColor:"transparent", width: "100%"}} /></td>
-                                <td style={{alignSelf:"right",verticalAlign:"middle",paddingRight:"10px"}}>
-                                    <IconButton id="filter">    
-                                        <i style={{color:"#2b2b2b"}} class="fas fa-filter" onClick = {this.toggleFilterModal}></i>
-                                    </IconButton>  
-                                </td> 
-                                <td style={{alignSelf:"right",verticalAlign:"middle",paddingRight:"10px"}}>
-                                    <IconButton id="mic" onClick={this.toggleListen}>    
-                                        <MicIcon   className="text-right" style = {{height : "30px",width :"30px",color : "#2b2b2b"}}/>
-                                    </IconButton>  
-                                </td>  
-                          </div>
-                          </tr>
-                          </table>
-                    </form>
-                          <center>
-                          <table className = "w-75" id="actionIcons">
-                          <tr>
-                                <td>
-                                    <div id="service" style= {{backgroundColor:"transparent"}}>  
-                                       <IconButton style = {{outline:"none"}} onClick={this.toggleModalShow.bind(this)}> <img src={trending}  style = {{height : "40px",width :"40px"}} 
-                                       ></img></IconButton>
-                                        <p className="font_custom" style={{fontFamily:"Exo 2"}}>
-                                        &nbsp;&nbsp;45</p>  
-                                    </div>  
-                                </td>
-                                <td>
-                                    <div id="service" style= {{backgroundColor:"transparent"}}>  
-                                       <IconButton style = {{outline:"none"}} onClick={this.toggleModalShow.bind(this)}> <img  src={dollar}  style = {{height : "40px",width :"40px"}} 
-                                       ></img></IconButton>
-                                        <p className="font_custom" style={{fontFamily:"Exo 2"}}>
-                                        &nbsp;&nbsp;10</p>  
-                                    </div>  
-                                </td>
-                                <td>
-                                    <div id="service" style= {{backgroundColor:"transparent"}}>  
-                                       <IconButton style = {{outline:"none"}} onClick={this.toggleModalShow.bind(this)}><b> <img  src={letter}  style = {{height : "40px",width :"40px"}} 
-                                       ></img></b></IconButton>
-                                        <p className="font_custom" style={{fontFamily:"Exo 2"}}>
-                                        &nbsp;&nbsp;36</p>  
-                                    </div>  
-                                </td>
-                                <td>
-                                    <div id="service" style= {{backgroundColor:"transparent"}}>  
-                                       <IconButton style = {{outline:"none"}} onClick={this.toggleModalShow.bind(this)}> <img  src={history}  style = {{height : "35px",width :"35px"}} 
-                                       ></img></IconButton>
-                                        <p className="font_custom" style={{fontFamily:"Exo 2"}}>
-                                        &nbsp;&nbsp;12</p>  
-                                    </div>  
-                                </td>
-                        </tr>
-                        </table>
-                         </center>
-                        {/* </div> */}
+                    <div className="shadow-lg bg-white p-3" style={{borderRadius:"10px"}}>
+                        <form onSubmit = {this.handleSubmit} > 
+                            <table className = "w-100">
+                                <tr>
+                                    <td colSpan={2} >
+                                        {/* <input name="input_search" id="input_search" defaultValue={term} type="text" placeholder="Title" onChange = {this.handleChange} contentEditable='true' aria-label="Search" style={{fontSize: '20px',border:"0px",paddingLeft:"30px",height: '70px',backgroundColor:"transparent", outlineColor:"transparent", width: "100%"}} /> */}
+                                        <TextField id="book_title" className="w-100" name="add_book" label="Title" variant="outlined" onChange = {this.handleChange_title.bind(this)} style={{marginBottom:"15px", height:"40px !important"}}  InputProps={{
+                                        classes: {
+                                        border:classes.border,
+                                        notchedOutline: classes.notchedOutline
+                                        }
+                                        }}/> 
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        
+                                        <Autocomplete
+                                            id="sub_category"
+                                            options={categories}
+                                            // // onChange={handleChange}
+                                            // value={category}
+                                            autoSelect = {true}
+                                            onSelect = {this.handleChange_category.bind(this)}
+                                            groupBy={option => option.firstLetter}
+                                            filterSelectedOptions
+                                            getOptionLabel={option => option.title}
+                                            renderInput={params => (
+                                                <ThemeProvider theme={theme}>
+                                                <TextField {...params}  label="Category" variant="outlined" fullWidth/>
+                                                </ThemeProvider>
+                                            )}
+                                        />
+                                        
+                                    </td>
+                                    <td>
+                                        <Autocomplete
+                                            id="categoryFilter"
+                                            
+                                            options={categories}
+                                            // // onChange={handleChange}
+                                            // value={category}
+                                            autoSelect = {true}
+                                            onSelect = {this.handleChange_sub_category.bind(this)}
+                                            classes={{
+                                                border:classes.border,
+                                                notchedOutline: classes.notchedOutline
+                                                }}
+                                            groupBy={option => option.firstLetter}
+                                            filterSelectedOptions
+                                            getOptionLabel={option => option.title}
+                                            renderInput={params => (
+                                                <TextField {...params} label="Sub Category" variant="outlined" fullWidth />
+                                            )}
+                                            
+                                        />
+                                    </td>
+                                </tr>
+                                <tr><td colSpan={2}><hr/></td></tr>
+                                <tr>
+                                    <td colSpan={2}>
+                                    <TextField id="book_title" className="w-100" name="add_book" 
+                                    onChange = {this.handleChange_description.bind(this)} label="Description" variant="outlined" multiline rows="4" style={{marginBottom:"15px", height:"40px !important"}}  InputProps={{
+                                        classes: {
+                                        border:classes.border,
+                                        notchedOutline: classes.notchedOutline
+                                        }
+                                        }}/>
+                                     <hr/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={2} className="image-upload">
+                                        <Center>
+                                            {/* <Button input="file" id = "chat_button" style= {{textTransform:"none",borderRadius:"60%"}}>
+                                                <i class="fas fa-paperclip" aria-hidden="true"></i>
+                                            </Button> */}
+                                             <label for="file-input">
+                                                 {/* <img src={clip} */}
+                                            </label> 
+                                            <input id="file-input" type="file" />
+                                            {/* <MDBFileInput multiple btnColor="info" /> */}
+                                            </Center>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colSpan={2}>
+                                        <Center>
+                                            <Button className="w-50" id = "chat_button" style= {{textTransform:"none"}} onClick = {this.submit}>
+                                                Submit
+                                            </Button>
+                                        </Center>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                 </mdb>
-                <MyVerticallyCenteredModal
-        show={this.state.modalShow}
-        onHide={this.toggleModalShow.bind(this)}
-      />
             </div>
             {/* RIGHTPANE */}
             <div className="rightpane centered p-3">
@@ -471,7 +601,7 @@ class Student_MainPage extends Component{
            </Modal>
 
            {/* Chatbot */}
-           <CustomChatbot />
+           {/* <CustomChatbot /> */}
            {/* <Launcher
                 agentProfile={{
                 teamName: 'Library Support',
