@@ -14,6 +14,7 @@ import {Launcher} from 'react-chat-window';
 import ChatBot from 'react-simple-chatbot';
 import CustomChatbot from './customChatBot'
 import TextField from '@material-ui/core/TextField';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -40,6 +41,10 @@ import { withStyles } from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
 import checklist from './Assets/Icon/checklist.svg';
 import chaticon from './Assets/Icon/comment.png';
+import view_all from './Assets/Icon/view.png';
+import response from './Assets/Icon/writing.png';
+import cancel from './Assets/Icon/cancel_1.png';
+import track from './Assets/Icon/track_1.png';
 //import clip from './Assets/Icon/paperclip.png'
 
 
@@ -60,7 +65,10 @@ const styles = theme => ({
     customBadge: {
        backgroundColor: "#ef5350",
        width: "2px",
-    }
+    },
+    input: {
+        display: 'none',
+      },
  });
 
  const theme=createMuiTheme({
@@ -99,13 +107,13 @@ class Student_MainPage extends Component{
             setSearchTerm: '',
             grievance : 
             {
-                studentid:1345,
+                studentid:1348,
                 title:'',
                 category:'',
                 subcategory:'',
                 description:'',
                 files:['file1', 'file2'],
-                action:[]
+                action:{}
             },
             go:false,
             listening: false,
@@ -116,6 +124,7 @@ class Student_MainPage extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange_category = this.handleChange_category.bind(this);
         this.handleChange_sub_category = this.handleChange_sub_category.bind(this);
+        this.fetch_grievance = this.fetch_grievance.bind(this);
 
         this.toggleListen = this.toggleListen.bind(this);
         this.handleListen = this.handleListen.bind(this);
@@ -153,14 +162,16 @@ handleChange_description(e)
     
 }
 
+// ------ Sending Grievance 
+
 submit()
 {
-    console.log(this.state.grievance)
+    //console.log(this.state.grievance)
     const options = {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         data: this.state.grievance,
-        url:'http://127.0.0.1:5000/student/124'
+        url:'http://127.0.0.1:5000/student/1242'
       }
   
       console.log("Sending Query: "+String(this.state.grievance.title));
@@ -172,12 +183,27 @@ submit()
         console.log('Not Posted');
         console.log(error.response)
       })
-      this.state.go=true;
+      //this.state.go=true;
 }
 
 
+// ------ Fetching All Grivances
 
-
+fetch_grievance = () => {
+    let res = axios.get("http://127.0.0.1:5000/studentAll/1348")
+    .then(res=>{
+        console.log(res.data);
+        // abc = res.data;
+        // console.log(res.data.Books)
+        //this.setState({db_book:{books:res.data.Books}});
+        // console.log(this.state.db_book)
+           //this.state.db_book.push(e);
+        }).catch(error=>{
+           console.log(error.response)
+        }) 
+        
+    this.toggleFilterModal();
+};
 
 
 
@@ -355,9 +381,9 @@ submit()
                         </h5>
                         <hr />
                         <table id="grievanceDetails">
-                            <tr onClick={this.toggleModalShow.bind(this)}>
+                            <tr onClick={this.fetch_grievance}>
                                 <td className="p-2" style={{textAlign:"center", width:"30%"}}>
-                                    <img src={trending}  style = {{height : "40px",width :"40px"}} 
+                                    <img src={view_all}  style = {{height : "40px",width :"40px"}} 
                                        ></img>
                                 </td>
                                 <td className="p-2">
@@ -367,7 +393,7 @@ submit()
                             </tr>
                             <tr onClick={this.toggleModalShow.bind(this)}>
                                 <td className="p-2" style={{textAlign:"center"}}>
-                                <img src={trending}  style = {{height : "40px",width :"40px"}} 
+                                <img src={response}  style = {{height : "40px",width :"40px"}} 
                                        ></img>
                                 </td>
                                 <td className="p-2">
@@ -376,7 +402,7 @@ submit()
                                 </td>
                             </tr> <tr onClick={this.toggleModalShow.bind(this)}>
                                 <td className="p-2" style={{textAlign:"center"}}>
-                                    <img src={trending}  style = {{height : "40px",width :"40px"}} 
+                                    <img src={cancel}  style = {{height : "40px",width :"40px"}} 
                                        ></img>
                                 </td>
                                 <td className="p-2">
@@ -408,7 +434,7 @@ submit()
                 </table>
                 </center>
                 <mdb md="6">
-                    <div className="shadow-lg bg-white p-3" style={{borderRadius:"10px"}}>
+                    <div className="shadow-lg bg-white p-3 mt-3" style={{borderRadius:"10px"}}>
                         <form onSubmit = {this.handleSubmit} > 
                             <table className = "w-100">
                                 <tr>
@@ -480,23 +506,35 @@ submit()
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={2} className="image-upload">
+                                    <td colSpan={2}>
+                                        {/* <tr className="input-group">
+                                            <td className="custom-file">
+                                                <input
+                                                    type="file"
+                                                    className="custom-file-input"
+                                                    id="inputGroupFile01"
+                                                    multiple
+                                                    id = "chat_button" 
+                                                />
+                                                <label className="custom-file-label" htmlFor="inputGroupFile01">
+                                                    Choose file
+                                                </label>
+                                            </td>
+                                        </tr> */}
                                         <Center>
-                                            {/* <Button input="file" id = "chat_button" style= {{textTransform:"none",borderRadius:"60%"}}>
-                                                <i class="fas fa-paperclip" aria-hidden="true"></i>
-                                            </Button> */}
-                                             <label for="file-input">
-                                                 {/* <img src={clip} */}
-                                            </label> 
-                                            <input id="file-input" type="file" />
-                                            {/* <MDBFileInput multiple btnColor="info" /> */}
-                                            </Center>
+                                            <input accept="image/*" className={classes.input} id="icon-button-file" type="file" multiple />
+                                            <label htmlFor="icon-button-file">
+                                                <IconButton color="primary" aria-label="upload picture" component="span">
+                                                <AttachFileIcon style = {{outline:"none !important",height : "30px",width :"30px",color : "#2b2b2b"}}/>
+                                                </IconButton>
+                                            </label>
+                                        </Center>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colSpan={2}>
                                         <Center>
-                                            <Button className="w-50" id = "chat_button" style= {{textTransform:"none"}} onClick = {this.submit}>
+                                            <Button className="w-25" id = "chat_button" style= {{textTransform:"none"}} onClick = {this.submit}>
                                                 Submit
                                             </Button>
                                         </Center>
@@ -566,7 +604,7 @@ submit()
            >
                <div class="modal_filter" style={{display:"flex", alignItems: "center", justifyContent:"space-between"}}>
                <div class="font_custom">
-                   <h3 className="p-3">Add Filters</h3>
+                   <h3 className="p-3"><b>View Grievances</b></h3>
                </div>
                <div>
                     <IconButton id="close" className="closeItem p-3" onClick={this.toggleFilterModal}>    
@@ -576,26 +614,153 @@ submit()
                </div>
                 <div>
                 <hr/>
-                    <div className="p-3">
+                    <div className="p-3" id="modalScroll">
                         {/* <TextField id="book_title" defaultValue=" " name="add_book"  className="w-50 font_custom" label="Author" variant="outlined"  style={{height:"40px !important"}}  InputProps={{
                         classes: {
                         border:classes.border,
                         notchedOutline: classes.notchedOutline
                         }
                         }}/> */}
-                        <Autocomplete
-                        id="categoryFilter"
-                        options={categories}
-                        // // onChange={handleChange}
-                        // value={category}
-                        groupBy={option => option.firstLetter}
-                        filterSelectedOptions
-                        getOptionLabel={option => option.title}
-                        style={{ width: "50%"}}
-                        renderInput={params => (
-                            <TextField {...params} label="Categories" variant="outlined" fullWidth />
-                        )}
-                        />
+                        <table className = "w-100 p-1 font_custom" >
+                            <tr style = {{textAlign:"center", borderRadius : "10px", background:"#f2f2f2"}}>
+                            <th style = {{width:"8%",fontSize:"18px", borderRight:"1.5px solid #dadada"}}>
+                                <b>ID</b>
+                            </th>
+                            <th style = {{width:"38%",fontSize:"18px",borderRight:"1.5px solid #dadada"}}>
+                                <b>Title</b>
+                            </th>
+                            <th style = {{width:"18%", fontSize:"18px",borderRight:"0.5px solid #dadada"}}>
+                                <b>Status</b>
+                            </th>
+                            <th style = {{width:"12%", fontSize:"18px", borderRight:"0.5px solid #dadada"}}>
+                                <b>Level</b>
+                            </th>
+                            <th style = {{width:"12%", fontSize:"18px"}}>
+                                <b>Date</b>
+                            </th>
+                            <th style = {{width:"12%", fontSize:"18px"}}>
+                                <b>Track</b>
+                            </th>
+                            </tr>
+                            <tr >
+                                <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                    1
+                                </td>
+                                <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
+                                    This is a test Title
+                                </td>
+
+                                <td className="pt-2 pb-2 pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    <div className="shadow inProgress">
+                                        <b>In-Progess</b>
+                                    </div>
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    Level 1
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    10 / 12 / 2019
+                                </td>
+                                <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                       <button style = {{border:"none",background:"none"}}>
+                                        <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img></button>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                    2
+                                </td>
+                                <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
+                                    This is a test Title 2 
+                                </td>
+                                <td className="pt-2 pb-2 pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    <div className="shadow resolved">
+                                        <b>Resolved</b>
+                                    </div>
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    Level 2
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    15 / 12 / 2019
+                                </td>
+                                <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                       <button style = {{border:"none",background:"none"}}>
+                                        <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img></button>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                    3
+                                </td>
+                                <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
+                                    This is a test Title 3 
+                                </td>
+                                <td className="pt-2 pb-2 pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    <div className="shadow debared">
+                                        <b>Debared</b>
+                                    </div>
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    Level 1
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    16 / 12 / 2019
+                                </td>
+                                <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                       <button style = {{border:"none",background:"none"}}>
+                                        <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img></button>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                    4
+                                </td>
+                                <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
+                                    This is a test Title 4 
+                                </td>
+                                <td className="pt-2 pb-2 pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    <div className="shadow response">
+                                        <b>Response</b>
+                                    </div>
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    Level 1
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    17 / 12 / 2019
+                                </td>
+                                <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                       <button style = {{border:"none",background:"none"}}>
+                                        <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img></button>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                    5
+                                </td>
+                                <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
+                                    This is a test Title 5 
+                                </td>
+                                <td className="pt-2 pb-2 pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    <div className="shadow raised" style = {{backgroundColor: "#7a7adb",backgroundImage: " linear-gradient(315deg, #7a7adb 0%, #170e13 74%)",borderRadius:"10px"}}>
+                                        <b>Raised</b>
+                                    </div>
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    Level 2
+                                </td>
+                                <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
+                                    18 / 12 / 2019
+                                </td>
+                                <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
+                                        <button style = {{border:"none",background:"none"}}>
+                                        <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img>
+                                        </button>
+                                       
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
            </Modal>
