@@ -105,21 +105,16 @@ class Student_MainPage extends Component{
     {
         super(props)
         this.state={
-            selected:false,
-            selected_1:true,
-            selected_2:false,
+            selected:-1,
             modalShow:false,
             filterModal1:false,
             trackModal:false,
-            viewResponses:false,
-            viewDebarred:false,
             setModalShow:true,
             searchTerm : '  ',
             setSearchTerm: '',
             grievance : 
             {
                 studentid:1348,
-                chainid:'',
                 title:'',
                 category:'',
                 subcategory:'',
@@ -145,8 +140,6 @@ class Student_MainPage extends Component{
             listening: false,
             term:'',
             db_book:[],
-            flag : -1,
-            success:false
 
         }
         this.handleChange = this.handleChange.bind(this);
@@ -154,13 +147,8 @@ class Student_MainPage extends Component{
         this.handleChange_category = this.handleChange_category.bind(this);
         this.handleChange_sub_category = this.handleChange_sub_category.bind(this);
         this.fetch_grievance = this.fetch_grievance.bind(this);
-        this.fetch_responses = this.fetch_responses.bind(this);
-        this.fetch_debarred = this.fetch_debarred.bind(this);
         this.fetch_track_grievance = this.fetch_track_grievance.bind(this);
         this.toggle_selection_track = this.toggle_selection_track.bind(this);
-        this.toggle_grievance_details = this.toggle_grievance_details.bind(this);
-        this.toggle_status_details=this.toggle_status_details.bind(this);
-        this.send_feedback = this.send_feedback.bind(this);
 
         this.toggleListen = this.toggleListen.bind(this);
         this.handleListen = this.handleListen.bind(this);
@@ -203,37 +191,6 @@ handleChange_description(e)
     this.state.grievance.description = e.target.value; 
     
 }
-// toggleTrackModal = () =>
-// {
-//     console.log("Flag: ",this.state.flag)
-//     if (this.state.flag == 0)
-//     {
-//         this.setState({
-//             filterModal1:!this.state.filterModal1,
-//             trackModal:!this.state.trackModal
-//             });
-//     }
-
-//     if (this.state.flag == 1)
-//     {
-//         this.setState({
-//             viewResponses:!this.state.viewResponses,
-//             trackModal:!this.state.trackModal
-//             });
-            
-//     }
-
-//     if (this.state.flag == 2)
-//     {
-//         this.setState({
-//             viewDebarred:!this.state.viewDebarred,
-//             trackModal:!this.state.trackModal
-//             });
-//     }
-//     this.setState({
-//         flag:-1
-//     })
-// }
 
 toggleTrackModal = () =>
 {
@@ -241,14 +198,6 @@ toggleTrackModal = () =>
         filterModal1:!this.state.filterModal1,
         trackModal:!this.state.trackModal
     });
-    this.setState({
-        viewResponses:!this.state.viewResponses,
-        trackModal:!this.state.trackModal
-    });
-    this.setState({
-        viewDebarred:!this.state.viewDebarred,
-        trackModal:!this.state.trackModal
-    })
 }
 
 // ------ Sending Grievance 
@@ -275,102 +224,15 @@ submit()
       //this.state.go=true;
 }
 
-// --------- Sending Feedback
-send_feedback=(e)=>{
-    
-    var response = ''
-    if (e){
-        response += 'yes'
-    }
-    else
-    {
-        response += 'no'
-    }
-    const options = {
-        method: 'PUT',
-        headers: { 'content-type': 'application/json' },
-        data: {satisfy:response},
-        url:'http://127.0.0.1:5000/student/'+this.state.grievance.chainid
-      }
-      console.log(options.data)
-    var result = axios(options).then(res=>{
-    console.log(res.data);
-    this.setState({
-        success:true
-    })
-    // this.toggleModelDel();
-    // this.set_display_del();
- 
-    //this.state.ddisplay_m = true;
-    // abc = res.data;
-    // console.log(res.data.Books)
-    // this.setState({db_book:{books:res.data.Books}});
-        //this.state.db_book.push(e);
- 
- 
-    }).catch(error=>{
-        console.log(error.response)
-    })
- 
- }
 
 // ------ Fetching All Grivances
 
-fetch_grievance = async() => {
+fetch_grievance = () => {
     this.setState({
         filterModal1: true,
         isloading:true
     })
-    let res = await axios.get("http://127.0.0.1:5000/studentAll/990")
-    .then(res=>{
-        console.log(res.data);
-        this.setState({
-            list_grievance:res.data,
-            isloading:false
-        })
-        console.log(this.state.list_grievance);
-        // abc = res.data;
-        // console.log(res.data.Books)
-        //this.setState({db_book:{books:res.data.Books}});
-        // console.log(this.state.db_book)
-           //this.state.db_book.push(e);
-        }).catch(error=>{
-           console.log(error.response)
-        }) 
-        
-};
-
-
-fetch_responses = () => {
-    this.setState({
-        viewResponses: true,
-        isloading:true
-    })
-    let res = axios.get("http://127.0.0.1:5000/studentAll/990")
-    .then(res=>{
-        console.log(res.data);
-        this.setState({
-            list_grievance:res.data,
-            isloading:false
-        })
-        console.log(this.state.list_grievance);
-        // abc = res.data;
-        // console.log(res.data.Books)
-        //this.setState({db_book:{books:res.data.Books}});
-        // console.log(this.state.db_book)
-           //this.state.db_book.push(e);
-        }).catch(error=>{
-           console.log(error.response)
-        }) 
-        
-};
-
-fetch_debarred = () => {
-    this.setState({
-        viewDebarred: true,
-        isloading:true
-    })
-    let res = axios.get("http://127.0.0.1:5000/studentAll/990")
+    let res = axios.get("http://127.0.0.1:5000/studentAll/999")
     .then(res=>{
         console.log(res.data);
         this.setState({
@@ -405,7 +267,6 @@ fetch_track_grievance = (item) => {
         this.setState({
             grievance : {
                 studentid : res.data.details.studentid,
-                chainid : res.data.details.chainid,
                 title : res.data.details.title,
                 category : res.data.details.category,
                 subcategory : res.data.details.subcategory,
@@ -446,11 +307,8 @@ toggle_selection_track = (index) => {
     //     ]
     // })
     // console.log("last index : ",this.state.last_track_index)
-    this.state.megatrack[this.state.last_track_index].is_selected = false
-    this.state.selected = false
-    this.state.selected_1 = false
-    this.state.megatrack[index].is_selected = true
-    this.state.selected_2 = true
+    this.state.megatrack[this.state.last_track_index].is_selected = !this.state.megatrack[this.state.last_track_index].is_selected
+    this.state.megatrack[index].is_selected = !this.state.megatrack[index].is_selected
     this.state.last_track_index = index
     this.forceUpdate()
     // console.log("index : ", index)
@@ -458,29 +316,6 @@ toggle_selection_track = (index) => {
     // console.log(this.state.megatrack[index].is_selected)
 }
 
-toggle_grievance_details = () => {
-    this.state.megatrack[this.state.last_track_index].is_selected = false
-    
-    this.forceUpdate()
-    this.setState({
-        selected:true,
-        selected_1:false,
-        selected_2 : false
-    })
-    console.log(this.state.selected)
-}
-
-toggle_status_details = () => {
-    this.state.megatrack[this.state.last_track_index].is_selected = false
-    
-    this.forceUpdate()
-    this.setState({
-        selected:false,
-        selected_1:true,
-        selected_2:false
-    })
-    // console.log(this.state.selected)
-}
 // --------------- Toggle Selection Track Grievance Ends 
 
 
@@ -500,7 +335,7 @@ toggle_status_details = () => {
             setModalShow:!this.state.setModalShow
         });
     }
-
+    
     toggleFilterModal = () =>
     {
         this.setState({
@@ -508,17 +343,6 @@ toggle_status_details = () => {
         });
     }
 
-    toggleviewResponses = () => {
-        this.setState({
-            viewResponses:!this.state.viewResponses
-        });
-    }
-
-    toggleviewDebarred = () => {
-        this.setState({
-            viewDebarred:!this.state.viewDebarred
-        });
-    }
     // handleChange = event => {
     //     setCategory(event.target.value);
     //   };
@@ -676,7 +500,7 @@ toggle_status_details = () => {
                                     <tr><h7>View all submitted grievances</h7></tr>
                                 </td>
                             </tr>
-                            <tr onClick={this.fetch_responses.bind(this)}>
+                            <tr onClick={this.toggleModalShow.bind(this)}>
                                 <td className="p-2" style={{textAlign:"center"}}>
                                 <img src={response}  style = {{height : "40px",width :"40px"}} 
                                        ></img>
@@ -685,7 +509,7 @@ toggle_status_details = () => {
                                     <tr><strong><h6 style={{fontSize:"18px"}}><b>Response</b></h6></strong></tr>
                                     <tr><h7>View the responses for submitted grivances</h7></tr>
                                 </td>
-                            </tr> <tr onClick={this.fetch_debarred.bind(this)}>
+                            </tr> <tr onClick={this.toggleModalShow.bind(this)}>
                                 <td className="p-2" style={{textAlign:"center"}}>
                                     <img src={cancel}  style = {{height : "40px",width :"40px"}} 
                                        ></img>
@@ -806,7 +630,7 @@ toggle_status_details = () => {
             {/* RIGHTPANE */}
             <div className="rightpane centered p-3">
                 <center style={{height:"95%", width:"80%", borderRadius:"20px"}} className="shadow bg-white">
-                    {/* <table width="90%" style= {{marginTop:"10px"}}>
+                    <table width="90%" style= {{marginTop:"10px"}}>
                        <tr>
                             <td>
                                 <h3 className = "font_custom" style= {{textAlign:"left", verticalAlign:"bottom"}}>
@@ -840,7 +664,7 @@ toggle_status_details = () => {
                             </tr>
                         </table>
                     </div>
-                    <hr width="85%"/> */}
+                    <hr width="85%"/>
                     <table width="90%" style= {{marginTop:"10px"}}>
                        <tr>
                             <td>
@@ -871,12 +695,11 @@ toggle_status_details = () => {
                 </center>
             </div>
 
-            {/* View Grievances Modal starts */}
-            <Modal
-                isOpen = {this.state.filterModal1}
-                centered = {true}
-                size='lg'
-            >
+           <Modal
+            isOpen = {this.state.filterModal1}
+            centered = {true}
+            size='lg'
+           >
                <div class="modal_filter" style={{display:"flex", alignItems: "center", justifyContent:"space-between"}}>
                <div class="font_custom">
                    <h3 className="p-3"><b>View Grievances</b></h3>
@@ -991,264 +814,17 @@ toggle_status_details = () => {
                     </div>
                 </div>
            </Modal>
-           {/* View Grievances Modal ends */}
-           
-
-
-            {/* View Responses Modal starts */}
-            <Modal
-                isOpen = {this.state.viewResponses}
-                centered = {true}
-                size='lg'
-            >
-               <div class="modal_filter" style={{display:"flex", alignItems: "center", justifyContent:"space-between"}}>
-               <div class="font_custom">
-                   <h3 className="p-3"><b>View Responses</b></h3>
-               </div>
-               <div>
-                    <IconButton id="close" className="closeItem p-3" onClick={this.toggleviewResponses}>    
-                    <CloseIcon className="text-right" style = {{outline:"none !important",height : "30px",width :"30px",color : "#2b2b2b"}}/>
-                    </IconButton>
-               </div>
-               </div>
-                <div>
-                <hr/>
-                    <div className="p-3" id="modalScroll">
-                    {
-                        this.state.isloading?
-                        <Center>
-                        <Code 
-                                 height={210}
-                                 backgroundColor={'#f2f2f2'}
-                                 foregroundColor={'#fff'}
-                                 style = {{paddingTop:"100px"}}
-                                 /></Center>
-                        :
-                        <table className = "w-100 p-1 font_custom" >
-                            <tr style = {{textAlign:"center", borderRadius : "10px", background:"#f2f2f2"}}>
-                            <th style = {{width:"8%",fontSize:"18px", borderRight:"1.5px solid #dadada"}}>
-                                <b>ID</b>
-                            </th>
-                            <th style = {{width:"38%",fontSize:"18px",borderRight:"1.5px solid #dadada"}}>
-                                <b>Title</b>
-                            </th>
-                            <th style = {{width:"18%", fontSize:"18px",borderRight:"0.5px solid #dadada"}}>
-                                <b>Status</b>
-                            </th>
-                            <th style = {{width:"12%", fontSize:"18px", borderRight:"0.5px solid #dadada"}}>
-                                <b>Level</b>
-                            </th>
-                            <th style = {{width:"12%", fontSize:"18px"}}>
-                                <b>Date</b>
-                            </th>
-                            <th style = {{width:"12%", fontSize:"18px"}}>
-                                <b>Track</b>
-                            </th>
-                            </tr>
-                            {/* Listing Grievance Starts */}
-                            
-                                {
-                                    // this.state.filterModal ?console.log('Printing',this.state.list_grievance.Data):null
-                                   this.state.list_grievance.Data.map((item, index) => {
-                                    //    if (this.state.list_grievance)
-                                    //    console.log("Printing ",this.state.list_grievance.Data[index])
-                                        if (item.status == "Response") { 
-                                       return(
-                                        <tr>
-                                            <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                            {index+1}
-                                            </td>
-                                            <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
-                                                {item.title}
-                                            </td>
-                                            {
-                                                item.status == "In-Progress"?
-                                                    <td className=" pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                    <div className="shadow inProgress">
-                                                        <b>In-Progess</b>
-                                                    </div>
-                                                    </td>
-                                                :item.status == "Resolved"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow resolved">
-                                                            <b>Resolved</b>
-                                                        </div>
-                                                    </td>
-                                                :item.status == "Debarred"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow debared">
-                                                            <b>Debarred</b>
-                                                        </div>
-                                                    </td>
-                                                :item.status == "Response"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow response">
-                                                            <b>Response</b>
-                                                        </div>
-                                                    </td>
-                                                :item.status == "Raised"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow raised">
-                                                            <b>Raised</b>
-                                                        </div>
-                                                    </td>
-                                                :null
-                                            }
-                                            
-                                            <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                {item.level}
-                                            </td>
-                                            <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                {item.date}
-                                            </td>
-                                            <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                                <button style = {{border:"none",background:"none",outline:"none"}} onClick={this.fetch_track_grievance.bind(this,item)}>
-                                                    <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                            );}
-                                        })    
-                                }
-                                {/* Listing Grievance Ends */}                            
-                        </table>
-                            }
-                    </div>
-                </div>
-           </Modal>
-            {/* View Responses Modal ends */}
-
-            {/* View Debared Modal starts*/}
-            <Modal
-                isOpen = {this.state.viewDebarred}
-                centered = {true}
-                size='lg'
-            >
-               <div class="modal_filter" style={{display:"flex", alignItems: "center", justifyContent:"space-between"}}>
-               <div class="font_custom">
-                   <h3 className="p-3"><b>View Debarred</b></h3>
-               </div>
-               <div>
-                    <IconButton id="close" className="closeItem p-3" onClick={this.toggleviewDebarred}>    
-                    <CloseIcon className="text-right" style = {{outline:"none !important",height : "30px",width :"30px",color : "#2b2b2b"}}/>
-                    </IconButton>
-               </div>
-               </div>
-                <div>
-                <hr/>
-                    <div className="p-3" id="modalScroll">
-                    {
-                        this.state.isloading?
-                        <Center>
-                        <Code 
-                                 height={210}
-                                 backgroundColor={'#f2f2f2'}
-                                 foregroundColor={'#fff'}
-                                 style = {{paddingTop:"100px"}}
-                                 /></Center>
-                        :
-                        <table className = "w-100 p-1 font_custom" >
-                            <tr style = {{textAlign:"center", borderRadius : "10px", background:"#f2f2f2"}}>
-                            <th style = {{width:"8%",fontSize:"18px", borderRight:"1.5px solid #dadada"}}>
-                                <b>ID</b>
-                            </th>
-                            <th style = {{width:"38%",fontSize:"18px",borderRight:"1.5px solid #dadada"}}>
-                                <b>Title</b>
-                            </th>
-                            <th style = {{width:"18%", fontSize:"18px",borderRight:"0.5px solid #dadada"}}>
-                                <b>Status</b>
-                            </th>
-                            <th style = {{width:"12%", fontSize:"18px", borderRight:"0.5px solid #dadada"}}>
-                                <b>Level</b>
-                            </th>
-                            <th style = {{width:"12%", fontSize:"18px"}}>
-                                <b>Date</b>
-                            </th>
-                            <th style = {{width:"12%", fontSize:"18px"}}>
-                                <b>Track</b>
-                            </th>
-                            </tr>
-                            {/* Listing Grievance Starts */}
-                            
-                                {
-                                    // this.state.filterModal ?console.log('Printing',this.state.list_grievance.Data):null
-                                   this.state.list_grievance.Data.map((item, index) => {
-                                    //    if (this.state.list_grievance)
-                                    //    console.log("Printing ",this.state.list_grievance.Data[index])
-                                        if (item.status == "Debarred") { 
-                                       return(
-                                        <tr>
-                                            <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                            {index+1}
-                                            </td>
-                                            <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
-                                                {item.title}
-                                            </td>
-                                            {
-                                                item.status == "In-Progress"?
-                                                    <td className=" pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                    <div className="shadow inProgress">
-                                                        <b>In-Progess</b>
-                                                    </div>
-                                                    </td>
-                                                :item.status == "Resolved"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow resolved">
-                                                            <b>Resolved</b>
-                                                        </div>
-                                                    </td>
-                                                :item.status == "Debarred"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow debared">
-                                                            <b>Debarred</b>
-                                                        </div>
-                                                    </td>
-                                                :item.status == "Response"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow response">
-                                                            <b>Response</b>
-                                                        </div>
-                                                    </td>
-                                                :item.status == "Raised"?
-                                                    <td className="pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                        <div className="shadow raised">
-                                                            <b>Raised</b>
-                                                        </div>
-                                                    </td>
-                                                :null
-                                            }
-                                            
-                                            <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                {item.level}
-                                            </td>
-                                            <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                {item.date}
-                                            </td>
-                                            <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                                <button style = {{border:"none",background:"none",outline:"none"}} onClick={this.fetch_track_grievance.bind(this,item)}>
-                                                    <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                            );}
-                                        })    
-                                }
-                                {/* Listing Grievance Ends */}                            
-                        </table>
-                            }
-                    </div>
-                </div>
-           </Modal>
-            {/* View Debared Modal ends */}
-
-            {/* Track Grievance Modal starts */}
-            <Modal isOpen = {this.state.trackModal} centered = {true} style={{marginBottom:"10px"}}>
+           <Modal
+           isOpen = {this.state.trackModal}
+           centered = {true}
+           style={{marginBottom:"10px"}}
+           >
                 <div class="modal_filter" style={{display:"flex", alignItems: "center", justifyContent:"space-between", width:"100%"}}>
-                    <div class="font_custom">
+                <div class="font_custom">
                     <h3 className="p-3"><b>Track Grievances</b></h3>
-                    </div>
+                </div>
                     <div>
-                        <IconButton id="close" className="closeItem p-3" onClick={this.toggleTrackModal.bind(this)}>    
+                        <IconButton id="close" className="closeItem p-3" onClick={this.toggleTrackModal}>    
                             <CloseIcon className="text-right" style = {{outline:"none !important",height : "30px",width :"30px",color : "#2b2b2b"}}/>
                         </IconButton>
                     </div>  
@@ -1272,10 +848,10 @@ toggle_status_details = () => {
                             </div>
                         </div> */}
                         <table className="trackTable" id="trackTable" cellPadding='-1' cellSpacing='-1'>
-                            <tr onClick = {this.toggle_grievance_details.bind(this)}>
-                                <td><img  className={this.state.selected? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected? selectedTrack :unselectedTrack}/></td>
+                            <tr>
+                                <td><img  className = "unselectedTrackImage"src={unselectedTrack}/></td>
                                 <td>
-                                    <div className={this.state.selected?"selectedMilestone shadow p-2 font_custom" :"unselectedMilestone shadow p-2 font_custom"} style = {{height:"90%"}}>
+                                    <div className="unselectedMilestone shadow p-2 font_custom" style = {{height:"90%"}}>
                                     <p style={{fontSize:"20px",fontWeight:"bold"}} className="font_custom">Grievance Submitted</p>
                                         <p style={{fontSize:"14px"}} className="pt-1 font_custom">{this.state.grievance.category} | {this.state.grievance.subcategory}</p>
                                         <p style={{fontSize:"12px", marginBottom:"0px"}} className="pt-1 pb-1">Rakshitha Shettigar | 10 / 02 / 2020</p>
@@ -1285,91 +861,29 @@ toggle_status_details = () => {
                             {/* ----- Mapping Timeline  */}
                             {
                                 this.state.megatrack.map((item, index)=>{
-                                //     console.log(index)
-                                //     console.log(this.state.megatrack.length)
-                                //   this.state.selected= (index==this.state.megatrack.length-1)
-                                    
+
                                     // const toggle_selection_track = (i) => {
                                     //     console.log("Clicked ",i)
                                     // }
                                     // console.log(index)
-                                        
-                                        return(
-                                            // <tr onClick = {this.toggle_selection_track.bind(this,index)}>
-                                            
-                                            <tr onClick = {() => {this.toggle_selection_track(index)}}>
-                                                <td>
-                                                    <img className={this.state.megatrack[index].is_selected? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.megatrack[index].is_selected? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
-                                                <td>
-                                                    <div className={item.is_selected?"selectedMilestone shadow p-2 font_custom" :"unselectedMilestone shadow p-2 font_custom"} style = {{height:"90%"}}>
-                                                        <p style={{fontSize:"20px",fontWeight:"bold"}} className="font_custom">{item.level}</p>
-                                                        <p style={{fontSize:"14px"}} className="pt-1 font_custom">{item.action}</p>
-                                                        <p style={{fontSize:"12px", marginBottom:"0px"}} className="pt-1 pb-1">Shaurya Shanoy | {item.date}</p>
-                                                    </div>
-                                                </td>
-                                            </tr>    
-                                        );
+                                    return(
+                                        // <tr onClick = {this.toggle_selection_track.bind(this,index)}>
+                                       
+                                        <tr onClick = {() => {this.toggle_selection_track(index)}}>
+                                            <td>
+                                                <img className={this.state.megatrack[index].is_selected? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.megatrack[index].is_selected? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
+                                            <td>
+                                                <div className={item.is_selected?"selectedMilestone shadow p-2 font_custom" :"unselectedMilestone shadow p-2 font_custom"} style = {{height:"90%"}}>
+                                                    <p style={{fontSize:"20px",fontWeight:"bold"}} className="font_custom">{item.level}</p>
+                                                    <p style={{fontSize:"14px"}} className="pt-1 font_custom">{item.action}</p>
+                                                    <p style={{fontSize:"12px", marginBottom:"0px"}} className="pt-1 pb-1">Shaurya Shanoy | {item.date}</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
                                 })
                             }
-                            {
-                                this.state.grievance.status == "Response"?
-                                <tr onClick = {this.toggle_status_details.bind(this)}>
-                                    <td>
-                                        <img className={this.state.selected_1? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected_1? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
-                                    <td>
-                                        <div className={this.state.selected_1? "selectedResponse p-3 shadow" : "unselectedResponse p-3 shadow"}>
-                                            <p style={{fontSize:"20px",fontWeight:"bold",color: "#f2f2f2"}} className="font_custom">Awaiting Response</p>
-                                            <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Please provide feedback </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                :
-                                this.state.grievance.status == "In-Progress"?
-                                <tr onClick = {this.toggle_status_details.bind(this)}>
-                                    <td>
-                                        <img className={this.state.selected_1? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected_1? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
-                                    <td>
-                                        <div className={this.state.selected_1? "selectedInProgress p-3 shadow" : "unselectedInProgress p-3 shadow"}>
-                                            <p style={{fontSize:"20px",fontWeight:"bold",color: "#f2f2f2"}} className="font_custom">{this.state.grievance.status}</p>
-                                            <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Your grievance is being administered </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                :
-                                this.state.grievance.status == "Resolved"?
-                                <tr onClick = {this.toggle_status_details.bind(this)}>
-                                    <td>
-                                        <img className={this.state.selected_1? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected_1? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
-                                    <td>
-                                        <div className={this.state.selected_1? "selectedResolved p-3 shadow" : "unselectedResolved p-3 shadow"}>
-                                            <p style={{fontSize:"20px",fontWeight:"bold",color: "#f2f2f2"}} className="font_custom">{this.state.grievance.status}</p>
-                                            <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Your grievance has been Resolved </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                :this.state.grievance.status == "Debarred"?
-                                <tr onClick = {this.toggle_status_details.bind(this)}>
-                                    <td>
-                                        <img className={this.state.selected_1? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected_1? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
-                                    <td>
-                                        <div className={this.state.selected_1? "selectedDebarred p-3 shadow" : "unselectedDebarred p-3 shadow"}>
-                                            <p style={{fontSize:"20px",fontWeight:"bold",color: "#f2f2f2"}} className="font_custom">{this.state.grievance.status}</p>
-                                            <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Your grievance has been Debarred </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                                :
-                                <tr onClick = {this.toggle_status_details.bind(this)}>
-                                <td>
-                                    <img className={this.state.selected_1? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected_1? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
-                                <td>
-                                    <div className={this.state.selected_1? "selectedRaised p-3 shadow" : "unselectedRaised p-3 shadow"}>
-                                        <p style={{fontSize:"20px",fontWeight:"bold",color: "#f2f2f2"}} className="font_custom">{this.state.grievance.status}</p>
-                                        <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Your grievance has been Debarred </p>
-                                    </div>
-                                </td>
-                            </tr>
-                            }
+
                             {/* <tr>
                                 <td><img src={selectedTrack} style={{height:"65%"}} /></td>
                                 <td>
@@ -1402,93 +916,14 @@ toggle_status_details = () => {
                             </tr> */}
                         </table>
                     </div>
-                    <div id="timelineItem" style={{width:"50%"}}>
+                    <div id="timelineItem" style={{width:"49%"}}>
                         <div className="timelineDescription p-4">
-                    {/* Track details begin */}
-                    { this.state.selected ? 
-                            
-                            // <Center><h3 className="mb-4">Grievance Details</h3></Center>
-                            <table className="w-100">
-                                <tr colSpan={2}><Center><p className="mb-4 font_custom" style={{fontSize:"30px", fontWeight:"bold"}}>Grivance Details</p></Center></tr>
-                                <tr>
-                                    <td colSpan={2}>
-                                        <TextField id="trackFormTitle" className="w-100" name="trackFormTitle" label="Title" variant="outlined" style={{marginBottom:"15px", height:"40px !important"}} value = {this.state.grievance.title}/> 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <TextField id="trackFormCategory" name="trackFormCategory" label="Category" variant="outlined" className="w-100" style={{marginBottom:"15px", height:"40px !important"}} value = {this.state.grievance.category}/> 
-                                    </td>
-                                    <td>
-                                        <TextField id="trackFormSubCategory" name="Sub Category" label="trackFormSubCategory" variant="outlined" value = {this.state.grievance.subcategory} className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={2}>
-                                        <TextField id="trackFormDescription" className="w-100" name="Description" value = {this.state.grievance.description} label="trackFormDescription" variant="outlined" multiline rows="4" style={{marginBottom:"15px", height:"40px !important"}}/>
-                                        <hr/>
-                                    </td>
-                                </tr>
-                            </table>
-                            :this.state.selected_2? 
-                            <table className="w-100">
-                                <tr colSpan={2}><Center><p style={{fontSize:"30px", fontWeight:"bold"}} className="mb-4 font_custom">Track Record</p></Center></tr>
-                                <tr>
-                                    <td colSpan={2}>
-                                        <TextField id="trackFormTitle" className="w-100" name="Subject" label="Subject" variant="outlined" value = {this.state.megatrack[this.state.last_track_index].action} style={{marginBottom:"15px", height:"40px !important"}}/> 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <TextField id="trackFormLevel" name="trackFormLevel" label="Level" variant="outlined" value = {this.state.megatrack[this.state.last_track_index].level} className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
-                                    </td>
-                                    <td>
-                                        <TextField id="trackFormAuthority" name="trackFormAuthority" label="Authority" variant="outlined" value = "Shaurya Shanoy" className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan={2}>
-                                        <TextField id="trackForm2Description" className="w-100" name="trackForm2Description" label="Description" value = {this.state.megatrack[this.state.last_track_index].action} variant="outlined" multiline rows="4" style={{marginBottom:"15px", height:"40px !important"}}/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <TextField id="trackFormDate" name="trackFormDate" label="Date" variant="outlined" value = {this.state.megatrack[this.state.last_track_index].date}  className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
-                                    </td>
-                                    <td>
-                                        <TextField id="trackFormTime" name="trackFormTime" label="Time" variant="outlined" value = {this.state.megatrack[this.state.last_track_index].current_time} className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
-                                    </td>
-                                    <hr/>
-                                </tr>
-                            </table>
-                            :this.state.selected_1?
-                             // Write here 
-                             this.state.grievance.status == "Response"?
-                            <div className="toggleResponseButton">
-                                <div className="areYouSatisfied">
-                                    <Center><p className="font_custom mt-3 mb-3" style={{fontSize:"50px", fontWeight:"bold"}}>Are you satisfied?</p></Center>
-                                </div>
-                                <div className="yesNo">
-                                    <div className="yepSatisfied" onClick = {this.send_feedback.bind(this,true)}>
-                                        <img src="https://res.cloudinary.com/iketu312/image/upload/v1581523600/undraw_smiley_face_lmgm_mq4hza.svg" style={{width:"150px", height:"150px"}} />
-                                    </div>
-                                    <div className="notSatisfied" onClick = {this.send_feedback.bind(this,false)}>
-                                        <img src="https://res.cloudinary.com/iketu312/image/upload/v1581523603/undraw_feeling_blue_4b7q_zz8ymc.svg" style={{width:"150px", height:"150px"}} />
-                                    </div>
-                                </div>
-                            </div>
-                            :null
-                            :null
-                            }
-                    
-                            
+                            <h3>Title</h3>
+                            <h7 style={{textAlign:"justify", textJustify:"auto"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut faucibus leo sit amet velit rhoncus ornare. Phasellus sapien leo, viverra nec porta ac, fermentum vel felis. Integer tincidunt lacus non urna ornare, vel efficitur dui congue. Suspendisse ut eleifend est. Praesent odio tellus, dapibus et tempor non, convallis at dolor. </h7>
                         </div>
                     </div>
                 </div>
-            </Modal>
-            {/* Track Grivance Modal ends */}
-
-            
+           </Modal>
         </div>
     );
 }
