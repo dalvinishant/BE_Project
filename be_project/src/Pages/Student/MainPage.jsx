@@ -445,7 +445,8 @@ toggle_selection_track = (index) => {
     //         index=!this.state.megatrack[index].is_selected
     //     ]
     // })
-    // console.log("last index : ",this.state.last_track_index)
+    console.log("last index : ",this.state.last_track_index)
+    console.log("Megatrack : ",this.state.megatrack)
     this.state.megatrack[this.state.last_track_index].is_selected = false
     this.state.selected = false
     this.state.selected_1 = false
@@ -459,6 +460,8 @@ toggle_selection_track = (index) => {
 }
 
 toggle_grievance_details = () => {
+    console.log("last index : ",this.state.last_track_index)
+    console.log("Megatrack : ",this.state.megatrack)
     this.state.megatrack[this.state.last_track_index].is_selected = false
     
     this.forceUpdate()
@@ -629,7 +632,7 @@ toggle_status_details = () => {
                 {/* <link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet"></link> */}
             </head>
             {/* LEFTPANE */}
-            <div className="leftpane centered p-3 font_custom">
+            <div className="leftpane centered font_custom">
                 <center style={{height:"90%", width:"80%", borderRadius:"20px",background:"#f2f2f2"}} className="shadow bg-white">
                     <div id="leftpane" className="p-3" style={{height:"330px"}}>
                         <table>

@@ -152,8 +152,9 @@ html, body {
 #chat_button{
   background-color: #000000;
   background-image: linear-gradient(147deg, #000000 0%, #434343 74%);
-  outline: none;
+  outline: none !important;
   border:none;
+  text-transform: none;
 }
 
 #exam_feed:hover{
@@ -374,15 +375,20 @@ html, body {
 }
 
 .resolved {
-  background-color: #3bb78f !important;
-  background-image: linear-gradient(315deg, #3bb78f 0%, #0bab64 74%);
+  background-color: #166d3b;
+  background-image: linear-gradient(147deg, #000000 0%, #166d3b 74%);
   border-radius: 10px; 
+  outline:none !important;
+  text-transform: none;
+  font-weight: bold;
 }
 
 .debared {
-  background-color: #c99889 !important;
-  background-image: linear-gradient(315deg, #eb4511  0%, #b02e0c 74%);
+  background-color :#3f0d12;
+  background-image: linear-gradient(315deg, #a71d31 0%,  #3f0d12 80%);  
   border-radius: 10px; 
+  text-transform: none;
+  outline: none !important;
 }
 
 .response {
