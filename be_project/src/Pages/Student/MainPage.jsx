@@ -139,7 +139,7 @@ class Student_MainPage extends Component{
                 Data:[]
             },
             megatrack:[],
-            last_track_index : -1,
+            last_track_index : 0,
             isloading:false,
             go:false,
             listening: false,
@@ -462,6 +462,7 @@ toggle_selection_track = (index) => {
 toggle_grievance_details = () => {
     console.log("last index : ",this.state.last_track_index)
     console.log("Megatrack : ",this.state.megatrack)
+    if (this.state.megatrack.length>0)
     this.state.megatrack[this.state.last_track_index].is_selected = false
     
     this.forceUpdate()
@@ -474,6 +475,7 @@ toggle_grievance_details = () => {
 }
 
 toggle_status_details = () => {
+    if (this.state.megatrack.length>0)
     this.state.megatrack[this.state.last_track_index].is_selected = false
     
     this.forceUpdate()
@@ -633,7 +635,7 @@ toggle_status_details = () => {
             </head>
             {/* LEFTPANE */}
             <div className="leftpane centered font_custom">
-                <center style={{height:"90%", width:"80%", borderRadius:"20px",background:"#f2f2f2"}} className="shadow bg-white">
+                <center style={{height:"90%", width:"90%", borderRadius:"20px",background:"#f2f2f2"}} className="shadow bg-white">
                     <div id="leftpane" className="p-3" style={{height:"330px"}}>
                         <table>
                             <tr>
@@ -705,7 +707,7 @@ toggle_status_details = () => {
                 </center>
             </div>
             {/* MIDDLEPANE */}
-            <div className="middlePane" id="middlePane">
+            <div className="middlePane ml-3" id="middlePane">
                 <center> 
                 <table>
                     <tr>
@@ -1103,7 +1105,7 @@ toggle_status_details = () => {
                                             </td>
                                             <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
                                                 {item.date}
-                                            </td>
+                                            </td>                                                                                                                                                               
                                             <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
                                                 <button style = {{border:"none",background:"none",outline:"none"}} onClick={this.fetch_track_grievance.bind(this,item)}>
                                                     <img src={track}  style = {{height : "25px",width :"25px", align:"center"}}></img>
