@@ -27,6 +27,7 @@ import ray from './Assets/ray.JPG';
 import logo from './Assets/Icon/logo_i2it_2.png';
 import pending from './Assets/Icon/pending.png';
 import reverted from './Assets/Icon/reverted.png';
+import return_img from './Assets/Icon/return.png';
 import debarred from './Assets/Icon/cancel_1.png';
 import forward from './Assets/Icon/Forward.png';
 import resolved from './Assets/Icon/resolved.png';
@@ -55,7 +56,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-class Commitee extends Component {
+class Principal extends Component {
 
     constructor(props)
     {
@@ -86,21 +87,7 @@ class Commitee extends Component {
             selected_1:true,
             selected_2:false,
             count:0,
-            c:{
-                Count:{
-                    pending:0,
-                    resolved:0,
-                    total:0,
-                    debarred:0
-                }
-            },
-            p_c:0,
-            rev_c:0,
-            f_c:0,
-            d_c:0,
-            res_c:0,
-            a_c:0,
-            f1:0,
+            c:0,
             flag:0,
             pending_modal:false,
             pending_modal_proc1:false,
@@ -108,16 +95,17 @@ class Commitee extends Component {
             forwaded_modal:false,
             debared_modal:false,
             resolved_modal:false,
+            returned_modal:false,
             all_modal:false,
             track_modal:false,
-            status:"",
+            status:'',
             list_grievance:{
                 Data:[]
             },
             list_grievance_buff:{
                 Data:[]
             },
-            response:'',
+            response:"",
             grievance : 
             {
                 studentid:1348,
@@ -182,10 +170,8 @@ isloading = ()=>
 pendingModal = () =>
 {
     this.setState({
-        pending_modal:!this.state.pending_modal,
-        p_c:this.state.c.Count.pending
+        pending_modal:!this.state.pending_modal
     })
-    console.log(this.state.p_c)
 }
 
 pendingModalProc1 = () =>
@@ -230,16 +216,14 @@ pendingModalProc1 = () =>
 revertedModal = () =>
 {
     this.setState({
-        reverted_modal:!this.state.reverted_modal,
-        rev_c:this.state.c.Count.revert
+        reverted_modal:!this.state.reverted_modal
     })
 }
 
 forwardedModal = () =>
 {
     this.setState({
-        forwarded_modal:!this.state.forwarded_modal,
-        f_c:this.state.c.Count.forward
+        forwarded_modal:!this.state.forwarded_modal
     })
     if (!this.state.forwarded_modal){
         this.setState({
@@ -253,24 +237,28 @@ forwardedModal = () =>
 resolvedModal = () =>
 {
     this.setState({
-        resolved_modal:!this.state.resolved_modal,
-        res_c:this.state.c.Count.resolved
+        resolved_modal:!this.state.resolved_modal
     })
 }
 
 debaredModal = () =>
 {
     this.setState({
-        debared_modal:!this.state.debared_modal,
-        d_c:this.state.c.Count.debarred
+        debared_modal:!this.state.debared_modal
+    })
+}
+
+returnedModal = () =>
+{
+    this.setState({
+        returned_modal:!this.state.returned_modal
     })
 }
 
 allModal = () =>
 {
     this.setState({
-        all_modal:!this.state.all_modal,
-        a_c:this.state.c.Count.total
+        all_modal:!this.state.all_modal
     })
 }
 
@@ -390,6 +378,13 @@ fetch_grievance = (modal,link) => {
         //console.log("Forwarded :",this.state.forwarded_modal)
     }
 
+    if (modal === "returned"){
+        this.setState({
+           returned_modal:true
+        })
+        //console.log("Forwarded :",this.state.forwarded_modal)
+    }
+
     if (modal === "debared"){
         this.setState({
            debared_modal:true
@@ -429,7 +424,7 @@ fetch_grievance = (modal,link) => {
     }
     else
     {
-        let res = axios.get("http://127.0.0.1:5000/committeeAll"+link)
+        let res = axios.get("http://127.0.0.1:5000/principal"+link)
             .then(res=>
             {
             //console.log(res.data);
@@ -455,7 +450,7 @@ fetch_grievance_details = (item) =>{
         pending_modal_proc1:!this.state.pending_modal_proc1,
         loading:true,
     })
-    let res = axios.get("http://127.0.0.1:5000/committee/"+item.chainid)
+    let res = axios.get("http://127.0.0.1:5000/principal/"+item.chainid)
     .then(res=>{
         this.setState({
             selected_item:res.data,
@@ -509,8 +504,8 @@ forward_fetch_calls = () =>{
             Data:[]
         }
     })
-    this.fetch_grievance("forwarded","_fd/Forward");
-    this.fetch_grievance("","_fr/Forward")
+    //this.fetch_grievance("forwarded","_fd/Forward");
+    this.fetch_grievance("forwarded","_fr/Forward")
 }
 
 debared_fetch_calls = () =>{
@@ -536,34 +531,32 @@ revert_fetch_calls = (item) =>{
 intervalID;
 intervalID2;
 componentDidMount(){
-    this.get_count()
+    this.get_c()
     this.get_stats()
-     this.intervalID = setInterval(this.get_count.bind(this),50000);
-     this.intervalID2 = setInterval(this.get_stats.bind(this),6000000);
+    this.intervalID = setInterval(this.get_c.bind(this),600000);
+    this.intervalID2 = setInterval(this.get_stats.bind(this),600000);
 }
 
 componentWillUnmount(){
     clearTimeout(this.intervalID);
     clearTimeout(this.intervalID2);
 }
-get_count = () =>
+get_c = () =>
 {
-    let res = axios.get("http://127.0.0.1:5000/notify/Committee")
+    let res = axios.get("http://127.0.0.1:5000/count")
     .then(res=>{
-        console.log(res.data)
+        //console.log(res.data)
         this.setState({
-            c:res.data
+            c:res.data.rows[0]
         })
     }).catch(error=>{
         console.log(error.response)
      }) 
 }
 
-
-
 get_stats = () => {
     
-    let res = axios.get("http://127.0.0.1:5000/statistics/Committee")
+    let res = axios.get("http://127.0.0.1:5000/statistics/Principal")
     .then(res=>{
         this.setState({
             stats:res.data
@@ -584,17 +577,17 @@ put_chainid = (id) =>{
     const data = "xyz"
     if (id == 1)
     {
-        this.action = 'forward/'
-        this.data = 'Need HoD Attention'
+        this.action = 'hodForward/'
+        this.data = 'Need Prinicipal Attention'
     }
     if (id == 2)
     {
-        this.action = 'debar/'
-        this.data = 'Irrevelant'
+        this.action = 'principalRevert/'
+        this.data = 'Look into this'
     }
     if (id == 3)
     {
-        this.action = 'committee/'
+        this.action = 'hod/'
         this.data = this.state.response
     }
     console.log("action : ",this.action)
@@ -615,7 +608,7 @@ put_chainid = (id) =>{
             console.log("flag : ",this.state.flag)
             if(this.state.flag == 0)
             {
-                this.fetch_grievance("pending","_ip");
+                this.fetch_grievance("pending","_ip/Pending");
             } 
             if(this.state.flag == 1)
             {
@@ -629,14 +622,14 @@ put_chainid = (id) =>{
                 this.setState({
                     flag:0
                 })
-                this.debared_fetch_calls();
+                //this.debared_fetch_calls();
             }
             if(this.state.flag == 3)
             {
                 this.setState({
                     flag:0
                 })
-                this.fetch_grievance("reverted","_fr/Revert");
+                this.fetch_grievance("reverted","_fr/Back");
             }
            //console.log(res.data);
            
@@ -776,47 +769,35 @@ to_resolve = () => {
                             {/* Grievance Action Starts  */}
                             {/* Row1  */}
                             <div className="justify-content-around p-2" style = {{display:"flex",flexDirection:"row"}}>
-                                <button className = {this.state.isHovered0 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover0} onMouseLeave={this.handleHover0} style= {{borderRadius:"10px",height:"130px",width:"31%",border:"white",outline:"none"}} onClick = {this.fetch_grievance.bind(this,"pending","_ip")}>
-                                    <div class="circle"> {(this.state.c.Count.pending - this.state.p_c)!=0 ? <b>+ {this.state.c.Count.pending - this.state.p_c} </b>: null}</div>
+                                <button className = {this.state.isHovered0 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover0} onMouseLeave={this.handleHover0} style= {{borderRadius:"10px",height:"130px",width:"31%",border:"white",outline:"none"}} onClick = {this.fetch_grievance.bind(this,"pending","_ip/Pending")}>
+                                    <div class="circle shadow-sm"><b>+ {this.state.c}</b></div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {pending} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Pending </p>
                                     </center>
                                 </button>
-                                <button className = {this.state.isHovered1 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover1} onMouseLeave={this.handleHover1} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"reverted","_fr/Revert")}>
-                                    <div class="circle"> {(this.state.c.Count.revert - this.state.rev_c)!=0 ? <b>+ {this.state.c.Count.revert - this.state.rev_c}</b>: null}</div>
+
+                                <button className = {this.state.isHovered3 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover3} onMouseLeave={this.handleHover3} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"returned","_fr")}>
+                                {/* <div class="circle shadow-sm"><b>+ 2</b></div> */}
                                     <center className="mt-2" style = {{width:"100%"}}>
-                                        <img src = {reverted} style={{height:"28%",width:"28%"}}/>
-                                        <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Reverted </p>
-                                    </center>
-                                </button>
-                                <button className = {this.state.isHovered2 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover2} onMouseLeave={this.handleHover2} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.forward_fetch_calls.bind(this)}>
-                                    <div class="circle"> {(this.state.c.Count.forward - this.state.f_c)!=0 ? <b>+ {this.state.c.Count.forward - this.state.f_c} </b>: null}</div>
-                                    <center className="mt-2" style = {{width:"100%"}}>
-                                        <img src = {forward} style={{height:"28%",width:"28%"}}/>
-                                        <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Forwarded </p>
+                                        <img src = {return_img} style={{height:"28%",width:"28%"}}/>
+                                        <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Returned</p>
                                     </center>
                                 </button>
                             </div>
                             {/* Row1 ends  */}
                             {/* Row2  */}
                             <div className="justify-content-around mt-4 pb-5 p-2" style = {{display:"flex",flexDirection:"row"}}>
-                                <button className = {this.state.isHovered3 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover3} onMouseLeave={this.handleHover3} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.debared_fetch_calls.bind(this)}>
-                                    <div class="circle">{(this.state.c.Count.debarred - this.state.d_c) !=0 ?<b> + {this.state.c.Count.debarred - this.state.d_c} </b>: null}</div>
-                                    <center className="mt-2" style = {{width:"100%"}}>
-                                        <img src = {debarred} style={{height:"28%",width:"28%"}}/>
-                                        <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Debarred </p>
-                                    </center>
-                                </button>
-                                <button className = {this.state.isHovered4 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover4} onMouseLeave={this.handleHover4} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"resolved","_r")}>
-                                <div class="circle">{(this.state.c.Count.resolved - this.state.res_c) !=0 ?<b> + {this.state.c.Count.resolved - this.state.res_c} </b>: null}</div>
+
+                                <button className = {this.state.isHovered4 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover4} onMouseLeave={this.handleHover4} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"resolved","_ip/Resolved")}>
+                                    {/* <div class="circle shadow-sm"><b>+ 2</b></div> */}
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {resolved} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Resolved</p>
                                     </center>
                                 </button>
-                                <button className = {this.state.isHovered5 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover5} onMouseLeave={this.handleHover5} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"all","")}>
-                                    <div class="circle">{(this.state.c.Count.total - this.state.a_c) !=0 ?<b> + {this.state.c.Count.total - this.state.a_c} </b>: null}</div>
+                                <button className = {this.state.isHovered5 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover5} onMouseLeave={this.handleHover5} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"all","All")}>
+                                    {/* <div class="circle shadow-sm"><b>+ 2</b></div> */}
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {all} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>All Grievances</p>
@@ -1053,7 +1034,7 @@ to_resolve = () => {
                                                         </tr>
                                                         <tr>
                                                             <td>
-                                                                <TextField id="trackFormLevel" name="trackFormLevel" label="Level" variant="outlined" value = "Committee" className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
+                                                                <TextField id="trackFormLevel" name="trackFormLevel" label="Level" variant="outlined" value = "Principal" className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
                                                             </td>
                                                             <td>
                                                                 <TextField id="trackFormAuthority" name="trackFormAuthority" label="Authority Name" variant="outlined" value = "Shaurya Shanoy" className="w-100" style={{marginBottom:"15px", height:"40px !important"}}/> 
@@ -1082,8 +1063,8 @@ to_resolve = () => {
                                     </div>
                                 </div>
                                <div style= {{display : "flex",flexDirection:"row"}}>
-                                    <Button id= "chat_button" className = {this.state.flag == 3 ? "font_custom w-50 disabled" : "font_custom w-50"} style = {{fontSize:"16px"}} variant="primary" onClick = {this.put_chainid.bind(this,1)}>•  &nbsp;Forward&nbsp;  •</Button>
-                                    <Button className = {this.state.flag == 3 ? "font_custom debared w-50 disabled" : " debared font_custom w-50"} style = {{fontSize:"16px"}} variant="primary" onClick = {this.put_chainid.bind(this,2)}>•  &nbsp;Debar&nbsp;  •</Button>
+                                    
+                                    <Button className = {this.state.flag == 3 ? "font_custom returned w-100 disabled" : " returned font_custom w-100"} style = {{fontSize:"16px"}} variant="primary" onClick = {this.put_chainid.bind(this,2)}>•  &nbsp;Return&nbsp;  •</Button>
                                </div>
                                 <Button className = "resolved font_custom" style = {{fontSize:"16px"}} variant="primary" onClick = {this.to_resolve.bind(this)}>•  &nbsp;Resolve&nbsp;  •</Button>
                                 
@@ -1228,7 +1209,7 @@ to_resolve = () => {
                                                 {
                                                     this.state.list_grievance_buff.Data.map((item, index) => 
                                                     {
-                                                        if(item.status == "In-Progress" || item.status == "Raised" && item.forwardcount>0)
+                                                        if(item.status == "In-Progress" && item.forwardcount>0)
                                                         {
                                                             return(
                                                                 <tr>
@@ -1302,18 +1283,18 @@ to_resolve = () => {
                     </Modal>
                     {/* Forwared Modal Ends  */}
 
-                    {/* Debared Modal Starts  */}
+                    {/* Returned Modal Starts  */}
                     <Modal 
-                        isOpen = {this.state.debared_modal}
+                        isOpen = {this.state.returned_modal}
                         centered = {true}
                         size='lg'>
                             <div>
                                 <div class="modal_filter" style={{display:"flex", alignItems: "center", justifyContent:"space-between"}}>
                                     <div class="font_custom">
-                                        <h3 className="pt-5 pl-4 pr-4 pb-2"><b>Debared Grievances</b></h3>
+                                        <h3 className="pt-5 pl-4 pr-4 pb-2"><b>Returned Grievances</b></h3>
                                     </div>
                                     <div>
-                                            <IconButton id="close" className="closeItem p-3" onClick={this.debaredModal.bind(this)}>    
+                                            <IconButton id="close" className="closeItem p-3" onClick={this.returnedModal.bind(this)}>    
                                             <CloseIcon className="text-right" style = {{outline:"none !important",height : "30px",width :"30px",color : "#2b2b2b"}}/>
                                             </IconButton>
                                     </div>
@@ -1348,11 +1329,11 @@ to_resolve = () => {
                                             </th>
                                             </tr>
 
-                                            {/* Listing Grievance In-Progress Starts */}
-                                            {
-                                                    this.state.list_grievance_buff.Data.map((item, index) => 
+                                            {/* Listing  Starts */}
+                                                {
+                                                    this.state.list_grievance.Data.map((item, index) => 
                                                     {
-                                                        if(item.status == "In-Progress" && item.debarcount >0)
+                                                        if(item.status == "Revert")
                                                         {
                                                             return(
                                                                 <tr>
@@ -1364,50 +1345,11 @@ to_resolve = () => {
                                                                     </td>
 
                                                                     <td className=" pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                                        <div className="shadow debaredip">
-                                                                            <b><i>{item.debarcount}/3</i> debarred</b>
+                                                                        <div className="shadow returned">
+                                                                            <b>Returned</b>
                                                                         </div>
                                                                     </td>
 
-                                                                    <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                                        {item.date}
-                                                                    </td>
-                                                                    <td className="p-3" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                                                        <button style = {{border:"none",background:"none",outline:"none"}} >
-                                                                            <img src={track}  style = {{height : "25px",width :"25px", align:"center"}} onClick={this.debar_modal_call.bind(this,item)}></img>
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                                );
-                                                        }
-                                                    })    
-                                                }
-                                            {/*Listing Grievance In-Progress Ends */}
-
-                                            {/* Listing Grievance Starts */}
-                                                {
-                                                    this.state.list_grievance.Data.map((item, index) => 
-                                                    {
-                                                        if(item.status == "Debarred")
-                                                        {
-                                                            return(
-                                                                <tr>
-                                                                    <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                                                        {item.chainid}
-                                                                    </td>
-                                                                    <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
-                                                                        {item.title.length>0?item.title:<i>No Title</i>}
-                                                                    </td>
-                                                                    {
-                                                                        item.status == "Debarred"?
-                                                                            <td className=" pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                                                <div className="shadow debared">
-                                                                                    <b>Debared</b>
-                                                                                </div>
-                                                                            </td>
-                                                                        :null
-                                                                    }
-                                                                    
                                                                     <td className="pt-2" style = {{fontSize:"14px",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
                                                                         {item.date}
                                                                     </td>
@@ -1421,7 +1363,7 @@ to_resolve = () => {
                                                         }
                                                     })    
                                                 }
-                                            {/*Listing Grievance Ends */}                            
+                                            {/*Returned Ends */}                            
                                     </table>
                                         }
                                  </div>
@@ -1568,7 +1510,7 @@ to_resolve = () => {
                                                         return(
                                                             <tr>
                                                                 <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                                                    {index+1}
+                                                                    {item.chainid}
                                                                 </td>
                                                                 <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
                                                                     {item.title.length>0?item.title:<i>No Title</i>}
@@ -1598,12 +1540,7 @@ to_resolve = () => {
                                                                             <b>Resolved</b>
                                                                         </div>
                                                                     </td>
-                                                                    :item.status == "Response"?
-                                                                    <td className=" pl-3 pr-3"  style = {{fontSize:"14px",color:"white",borderBottom:"1.5px solid #dadada",borderRight:"1.5px solid #dadada",textAlign:"center"}}>
-                                                                        <div className="shadow response">
-                                                                            <b>Response</b>
-                                                                        </div>
-                                                                    </td>
+                                                                    
                                                                     :null
 
                                                                 }
@@ -1824,4 +1761,4 @@ to_resolve = () => {
     };
 }
 
-export default withStyles(styles) (Commitee);
+export default withStyles(styles) (Principal);

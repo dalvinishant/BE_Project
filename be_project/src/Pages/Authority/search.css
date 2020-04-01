@@ -598,15 +598,14 @@ html, body {
 
 .circle {
   position: relative;
-  left:80%;
-  width: 22px;
+  left:70%;
+  width: 25px;
   height: 22px;
   border-radius: 50%;
-  font-size: 8.5px;
-  color: #fff;
+  font-size: 13px;
+  color: #434343;
   line-height: 22px;
   text-align: center;
-  background-color: #ef5350;
   font-family: "Exo 2";
 }
 

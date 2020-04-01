@@ -88,15 +88,27 @@ const styles = theme => ({
  })
 
  const categories = [
-    { title: 'Biographies and Memoirs'},
-    { title: 'Health, Mind and Body'},
-    { title: 'History'},
-    { title: 'Fiction and Literature'},
-    { title: 'Business and Investing'},
-    { title: 'Engineeting'},
-    { title: 'Mystery and Thrillers'},
-    { title: 'Religion and Spirituality'},
-    { title: 'Romance'}
+    { title: 'LAN'},
+    { title: 'Food'},
+    { title: 'Fee Payment'},
+    { title: 'Hostel'},
+    { title: 'Scholorship'},
+    { title: 'Exam Form'},
+    { title: 'Student Welfare'},
+    { title: 'Sanitation'},
+    { title: 'Transport'},
+    { title: 'Others'}
+ ];
+
+ const sub_categories = [
+    { title: 'Payment Gateway'},
+    { title: 'Network Issue'},
+    { title: 'Reciept'},
+    { title: 'Certificate'},
+    { title: 'Timings'},
+    { title: 'Application Rejected'},
+    { title: 'Quality'},
+    { title: 'Others'}
  ];
 
 class Student_MainPage extends Component{
@@ -145,6 +157,7 @@ class Student_MainPage extends Component{
             term:'',
             db_book:[],
             flag : -1,
+            id:0,
             success:false
 
         }
@@ -152,13 +165,9 @@ class Student_MainPage extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange_category = this.handleChange_category.bind(this);
         this.handleChange_sub_category = this.handleChange_sub_category.bind(this);
-        this.fetch_grievance = this.fetch_grievance.bind(this);
-        this.fetch_responses = this.fetch_responses.bind(this);
-        this.fetch_debarred = this.fetch_debarred.bind(this);
-        this.fetch_track_grievance = this.fetch_track_grievance.bind(this);
+
         this.toggle_selection_track = this.toggle_selection_track.bind(this);
-        this.toggle_grievance_details = this.toggle_grievance_details.bind(this);
-        this.toggle_status_details=this.toggle_status_details.bind(this);
+
         this.send_feedback = this.send_feedback.bind(this);
 
         this.toggleListen = this.toggleListen.bind(this);
@@ -234,20 +243,23 @@ handleChange_description(e)
 //     })
 // }
 
-toggleTrackModal = () =>
-{
-    this.setState({
-        filterModal1:!this.state.filterModal1,
-        trackModal:!this.state.trackModal
-    });
-    this.setState({
-        viewResponses:!this.state.viewResponses,
-        trackModal:!this.state.trackModal
-    });
-    this.setState({
-        viewDebarred:!this.state.viewDebarred,
-        trackModal:!this.state.trackModal
-    })
+
+toggleTrackModal = (id) =>
+{ 
+    if(id == 0)
+    {
+        this.fetch_grievance()
+    }
+
+    if(id == 1)
+    {
+        this.fetch_responses()
+    }
+
+    if(id == 2)
+    {
+        this.fetch_debarred()
+    }
 }
 
 // ------ Sending Grievance 
@@ -265,7 +277,27 @@ submit()
       console.log("Sending Query: "+String(this.state.grievance.title));
       console.log(this.state.grievance)
       var result = axios(options).then(res=>{
-           console.log('Posted');
+            alert('Posted');
+            this.setState({
+                    grievance : 
+                {
+                    studentid:990,
+                    chainid:'',
+                    title:'',
+                    category:'',
+                    subcategory:'',
+                    description:'',
+                    track : {
+                        level:"Committee",
+                        action:"",
+                        time:"", 
+                    },
+                    // files:['file1', 'file2'],
+                    status:"In-Progress",
+                    satisfy:""
+                }
+            })
+            console.log('Posted');
            console.log(res.data);
       }).catch(error=>{
         console.log('Not Posted');
@@ -297,6 +329,8 @@ send_feedback=(e)=>{
     this.setState({
         success:true
     })
+    alert("Successfull ! ")
+    this.fetch_responses()
     // this.toggleModelDel();
     // this.set_display_del();
  
@@ -315,17 +349,19 @@ send_feedback=(e)=>{
 
 // ------ Fetching All Grivances
 
-fetch_grievance = async() => {
+fetch_grievance = () => {
     this.setState({
+        trackModal:false,
         filterModal1: true,
         isloading:true
     })
-    let res = await axios.get("http://127.0.0.1:5000/studentAll/990")
+    let res = axios.get("http://127.0.0.1:5000/studentAll/990")
     .then(res=>{
         console.log(res.data);
         this.setState({
             list_grievance:res.data,
-            isloading:false
+            isloading:false,
+            id:0
         })
         console.log(this.state.list_grievance);
         // abc = res.data;
@@ -342,6 +378,7 @@ fetch_grievance = async() => {
 
 fetch_responses = () => {
     this.setState({
+        trackModal:false,
         viewResponses: true,
         isloading:true
     })
@@ -350,7 +387,8 @@ fetch_responses = () => {
         console.log(res.data);
         this.setState({
             list_grievance:res.data,
-            isloading:false
+            isloading:false,
+            id:1
         })
         console.log(this.state.list_grievance);
         // abc = res.data;
@@ -366,6 +404,7 @@ fetch_responses = () => {
 
 fetch_debarred = () => {
     this.setState({
+        trackModal:false,
         viewDebarred: true,
         isloading:true
     })
@@ -374,7 +413,8 @@ fetch_debarred = () => {
         console.log(res.data);
         this.setState({
             list_grievance:res.data,
-            isloading:false
+            isloading:false,
+            id:2
         })
         console.log(this.state.list_grievance);
         // abc = res.data;
@@ -392,11 +432,14 @@ fetch_debarred = () => {
 
 //  ------------- Fetching Track Grievance 
 fetch_track_grievance = (item) => {
-    // this.setState({
-    //     filterModal1: true,
-    //     isloading:true
-    // })
-    this.toggleTrackModal()
+    this.setState({
+        viewDebarred:false,
+        viewResponses:false,
+        filterModal1:false,
+        trackModal: true,
+        isloading:true
+    })
+    // this.toggleTrackModal()
     console.log(item.chainid)
     let res = axios.get("http://127.0.0.1:5000/student/"+String(item.chainid))
     .then(res=>{
@@ -634,7 +677,7 @@ toggle_status_details = () => {
             </head>
             {/* LEFTPANE */}
             <div className="leftpane centered font_custom">
-                <center style={{height:"90%", width:"90%", borderRadius:"20px",background:"#f2f2f2"}} className="shadow bg-white">
+                <center style={{height:"90%", width:"85%", borderRadius:"20px",background:"#f2f2f2"}} className="shadow bg-white">
                     <div id="leftpane" className="p-3" style={{height:"330px"}}>
                         <table>
                             <tr>
@@ -706,14 +749,14 @@ toggle_status_details = () => {
                 </center>
             </div>
             {/* MIDDLEPANE */}
-            <div className="middlePane ml-3" id="middlePane">
+            <div className="middlePane ml-4" id="middlePane">
                 <center> 
                 <table>
                     <tr>
                         <td><img style={{width:"100px",verticalAlign:"center",}}src={logo}/></td>
                         <td>
                             <h2 style={{verticalAlign:"center", textAlign:"left",marginLeft:"20px", marginTop:"10px"}} id='title'>International Institute of<br/>Information Technology</h2>
-                            <div style = {{borderTop:"2px solid #ff0000", width:'70%', marginLeft : '20px'}}>
+                            <div style = {{borderTop:"2px solid #ff0000", width:'65%', marginLeft : '20px'}}>
                             <h4 id = "title" style = {{ marginTop:"1px"}}> Grievance Portal</h4>
                             </div>
                         </td>
@@ -754,7 +797,7 @@ toggle_status_details = () => {
                                         <Autocomplete
                                             id="categoryFilter"
                                             
-                                            options={categories}
+                                            options={sub_categories}
                                             // // onChange={handleChange}
                                             // value={category}
                                             autoSelect = {true}
@@ -796,7 +839,7 @@ toggle_status_details = () => {
                                 <tr>
                                     <td colSpan={2}>
                                         <Center>
-                                            <Button className="w-25" id = "chat_button" style= {{textTransform:"none"}} onClick = {this.submit}>
+                                            <Button className="w-25" type = "reset" id = "chat_button" style= {{textTransform:"none"}} onClick = {this.submit}>
                                                 Submit
                                             </Button>
                                         </Center>
@@ -935,7 +978,7 @@ toggle_status_details = () => {
                                        return(
                                         <tr>
                                             <td className="pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada",textAlign:"center"}}>
-                                            {index+1}
+                                            {item.chainid}
                                             </td>
                                             <td className = "pl-2 pt-2" style = {{fontSize:"14px",borderRight:"1.5px solid #dadada",borderBottom:"1.5px solid #dadada"}}>
                                                 {item.title}
@@ -996,8 +1039,6 @@ toggle_status_details = () => {
                 </div>
            </Modal>
            {/* View Grievances Modal ends */}
-           
-
 
             {/* View Responses Modal starts */}
             <Modal
@@ -1252,7 +1293,7 @@ toggle_status_details = () => {
                     <h3 className="p-3"><b>Track Grievances</b></h3>
                     </div>
                     <div>
-                        <IconButton id="close" className="closeItem p-3" onClick={this.toggleTrackModal.bind(this)}>    
+                        <IconButton id="close" className="closeItem p-3" onClick={this.toggleTrackModal.bind(this,this.state.id)}>    
                             <CloseIcon className="text-right" style = {{outline:"none !important",height : "30px",width :"30px",color : "#2b2b2b"}}/>
                         </IconButton>
                     </div>  
@@ -1363,13 +1404,25 @@ toggle_status_details = () => {
                                     </td>
                                 </tr>
                                 :
+                                    this.state.grievance.status == "Revert"?
+                                    <tr onClick = {this.toggle_status_details.bind(this)}>
+                                        <td>
+                                            <img className={this.state.selected_1? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected_1? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
+                                        <td>
+                                            <div className={this.state.selected_1? "selectedInProgress p-3 shadow" : "unselectedInProgress p-3 shadow"}>
+                                                <p style={{fontSize:"20px",fontWeight:"bold",color: "#f2f2f2"}} className="font_custom">{this.state.grievance.status}</p>
+                                                <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Your grievance has been Debarred </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                :
                                 <tr onClick = {this.toggle_status_details.bind(this)}>
                                 <td>
                                     <img className={this.state.selected_1? "selectedTrackImage" :"unselectedTrackImage"} src={this.state.selected_1? selectedTrack :unselectedTrack} style={{height:"65%"}} /></td>
                                 <td>
                                     <div className={this.state.selected_1? "selectedRaised p-3 shadow" : "unselectedRaised p-3 shadow"}>
                                         <p style={{fontSize:"20px",fontWeight:"bold",color: "#f2f2f2"}} className="font_custom">{this.state.grievance.status}</p>
-                                        <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Your grievance has been Debarred </p>
+                                        <p style={{fontSize:"14px", color:"#f2f2f2"}} className="font_custom">Your grievance is in progress  </p>
                                     </div>
                                 </td>
                             </tr>

@@ -12,7 +12,8 @@ import SearchResult from './Pages/Student/SearchResult'
 import QR from './Pages/Student/QR';
 import Library_MainPage from './Pages/Library/Library_MainPage';
 import Commitee from './Pages/Authority/Commitee';
-import HoD from './Pages/Authority/Hod'
+import HoD from './Pages/Authority/Hod';
+import Principal from './Pages/Authority/Principal';
 
 
 class App extends Component {
@@ -24,6 +25,7 @@ class App extends Component {
     <Route path = "/Library_MainPage" component = {Library_MainPage} />
     <Route path = "/Commitee" component = {Commitee} />
     <Route path = "/HOD" component = {HoD} />
+    <Route path = "/Principal" component = {Principal} />
     <Route path="/Search_Result" component ={SearchResult}/>
     <Route path="/QR" component={QR}/>
 
