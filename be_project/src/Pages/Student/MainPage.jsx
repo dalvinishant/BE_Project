@@ -118,7 +118,7 @@ class Student_MainPage extends Component{
             setSearchTerm: '',
             grievance : 
             {
-                studentid:1348,
+                studentid:990,
                 chainid:'',
                 title:'',
                 category:'',
@@ -127,8 +127,7 @@ class Student_MainPage extends Component{
                 track : {
                     level:"Committee",
                     action:"",
-                    time:"",
-                    
+                    time:"", 
                 },
                 // files:['file1', 'file2'],
                 status:"In-Progress",
@@ -809,7 +808,7 @@ toggle_status_details = () => {
                 </mdb>
             </div>
             {/* RIGHTPANE */}
-            <div className="rightpane centered p-3">
+            <div className="rightpane centered pl-2 pt-3 pb-3 pr-1">
                 <center style={{height:"95%", width:"80%", borderRadius:"20px"}} className="shadow bg-white">
                     {/* <table width="90%" style= {{marginTop:"10px"}}>
                        <tr>

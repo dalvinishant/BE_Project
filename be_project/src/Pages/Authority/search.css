@@ -399,10 +399,19 @@ html, body {
   outline: none !important;
 }
 
+.returned {
+  background-color: #310e68;
+  background-image: linear-gradient(316deg, #310e68 0%, #5f0f40 74%);
+  border-radius: 10px; 
+  text-transform: none;
+  outline: none !important;
+}
+
 .response {
   background-color: #045de9 !important;
   background-image: linear-gradient(315deg, #09c6f9  0%, #045de9 74%);
   border-radius: 10px; 
+  text-transform:none;
 }
 
 .raised {
