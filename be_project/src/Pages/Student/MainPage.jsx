@@ -676,7 +676,7 @@ toggle_status_details = () => {
                 {/* <link href="https://fonts.googleapis.com/css?family=Exo&display=swap" rel="stylesheet"></link> */}
             </head>
             {/* LEFTPANE */}
-            <div className="leftpane centered font_custom">
+            <div className="leftpane1 centered font_custom">
                 <center style={{height:"90%", width:"85%", borderRadius:"20px",background:"#f2f2f2"}} className="shadow bg-white">
                     <div id="leftpane" className="p-3" style={{height:"330px"}}>
                         <table>

@@ -87,7 +87,21 @@ class Principal extends Component {
             selected_1:true,
             selected_2:false,
             count:0,
-            c:0,
+            c:{
+                Count:{
+                    pending:0,
+                    resolved:0,
+                    total:0,
+                    debarred:0,
+
+                }
+            },
+            p_c:0,
+            ret_c:0,
+            f_c:0,
+            d_c:0,
+            res_c:0,
+            a_c:0,
             flag:0,
             pending_modal:false,
             pending_modal_proc1:false,
@@ -170,8 +184,13 @@ isloading = ()=>
 pendingModal = () =>
 {
     this.setState({
-        pending_modal:!this.state.pending_modal
+        pending_modal:!this.state.pending_modal,
+        p_c:this.state.c.Count.pending
     })
+    this.state.p_c = this.state.c.Count.pending
+    this.forceUpdate()
+    console.log("c.Count.pending : ",this.state.c.Count.pending)
+    console.log("p_m: ",this.state.p_c)
 }
 
 pendingModalProc1 = () =>
@@ -237,7 +256,8 @@ forwardedModal = () =>
 resolvedModal = () =>
 {
     this.setState({
-        resolved_modal:!this.state.resolved_modal
+        resolved_modal:!this.state.resolved_modal,
+        res_c:this.state.c.Count.resolved
     })
 }
 
@@ -251,14 +271,16 @@ debaredModal = () =>
 returnedModal = () =>
 {
     this.setState({
-        returned_modal:!this.state.returned_modal
+        returned_modal:!this.state.returned_modal,
+        ret_c:this.state.c.Count.sent_to_lower
     })
 }
 
 allModal = () =>
 {
     this.setState({
-        all_modal:!this.state.all_modal
+        all_modal:!this.state.all_modal,
+        a_c:this.state.c.Count.total
     })
 }
 
@@ -531,29 +553,30 @@ revert_fetch_calls = (item) =>{
 intervalID;
 intervalID2;
 componentDidMount(){
-    this.get_c()
+    this.get_count()
     this.get_stats()
-    this.intervalID = setInterval(this.get_c.bind(this),600000);
-    this.intervalID2 = setInterval(this.get_stats.bind(this),600000);
+    this.intervalID = setInterval(this.get_count.bind(this),60000);
+    this.intervalID2 = setInterval(this.get_stats.bind(this),60000);
 }
 
 componentWillUnmount(){
     clearTimeout(this.intervalID);
     clearTimeout(this.intervalID2);
 }
-get_c = () =>
+
+get_count = () =>
 {
-    let res = axios.get("http://127.0.0.1:5000/count")
+    let res = axios.get("http://127.0.0.1:5000/notify/Principal")
     .then(res=>{
-        //console.log(res.data)
+        console.log(res.data)
+        console.log("p_c : ",this.state.p_c)
         this.setState({
-            c:res.data.rows[0]
+            c:res.data
         })
     }).catch(error=>{
         console.log(error.response)
      }) 
 }
-
 get_stats = () => {
     
     let res = axios.get("http://127.0.0.1:5000/statistics/Principal")
@@ -608,6 +631,8 @@ put_chainid = (id) =>{
             console.log("flag : ",this.state.flag)
             if(this.state.flag == 0)
             {
+                this.state.c.Count.pending = this.state.c.Count.pending - 1
+                this.forceUpdate() 
                 this.fetch_grievance("pending","_ip/Pending");
             } 
             if(this.state.flag == 1)
@@ -721,7 +746,7 @@ to_resolve = () => {
                                         <img className="shadow" style={{width:"80px", height:"80px", borderRadius:"50%"}}src={ray}/>
                                     </td>
                                     <td>
-                                        <h3 className="font_custom" style = {{marginTop:"10px",fontSize:"20px", verticalAlign:"middle", paddingLeft:"10px"}}>Ninad Kheratkar
+                                        <h3 className="font_custom" style = {{marginTop:"10px",fontSize:"20px", verticalAlign:"middle", paddingLeft:"10px"}}>Ketan Ingale
                                         </h3>
                                     </td>
                                     </tr>
@@ -729,14 +754,6 @@ to_resolve = () => {
                                 <center>
                                     <table className = "font_custom" id="studentDetails" style = {{marginTop: "20px", borderRadius:"10px",background:"#f2f2f2"}}>
                                         <tr style = {{padding:"20px"}}>
-                                            <td >
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Library ID</div>
-                                            </td>
-                                            <td>
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>L-16-10</div>
-                                            </td>
-                                        </tr>
-                                        <tr style = {{padding:"10px"}}>
                                             <td>
                                                 <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>College</div>
                                             </td>
@@ -745,11 +762,19 @@ to_resolve = () => {
                                             </td>
                                         </tr>
                                         <tr style = {{padding:"10px"}}>
-                                            <td>
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Mobile</div>
+                                            <td >
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>College ID</div>
                                             </td>
                                             <td>
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>+91-9890358113</div>
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>L-11-43</div>
+                                            </td>
+                                        </tr>
+                                        <tr style = {{padding:"10px"}}>
+                                            <td>
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Level</div>
+                                            </td>
+                                            <td>
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Principal</div>
                                             </td>
                                         </tr>
                                     </table>
@@ -770,7 +795,7 @@ to_resolve = () => {
                             {/* Row1  */}
                             <div className="justify-content-around p-2" style = {{display:"flex",flexDirection:"row"}}>
                                 <button className = {this.state.isHovered0 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover0} onMouseLeave={this.handleHover0} style= {{borderRadius:"10px",height:"130px",width:"31%",border:"white",outline:"none"}} onClick = {this.fetch_grievance.bind(this,"pending","_ip/Pending")}>
-                                    <div class="circle shadow-sm"><b>+ {this.state.c}</b></div>
+                                <div class="circle"> {(this.state.c.Count.pending - this.state.p_c)!=0 ? <b>+ {this.state.c.Count.pending - this.state.p_c} </b>: null}</div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {pending} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Pending </p>
@@ -778,7 +803,7 @@ to_resolve = () => {
                                 </button>
 
                                 <button className = {this.state.isHovered3 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover3} onMouseLeave={this.handleHover3} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"returned","_fr")}>
-                                {/* <div class="circle shadow-sm"><b>+ 2</b></div> */}
+                                    <div class="circle"> {(this.state.c.Count.senr_to_lower - this.state.ret_c) < 0 ? <b>{this.setState({ret_c : this.state.c.Count.senr_to_lower})}</b> : (this.state.c.Count.sent_to_lower - this.state.ret_c) != 0 ?<b>+ {this.state.c.Count.sent_to_lower - this.state.ret_c}</b>:null}</div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {return_img} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Returned</p>
@@ -790,14 +815,14 @@ to_resolve = () => {
                             <div className="justify-content-around mt-4 pb-5 p-2" style = {{display:"flex",flexDirection:"row"}}>
 
                                 <button className = {this.state.isHovered4 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover4} onMouseLeave={this.handleHover4} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"resolved","_ip/Resolved")}>
-                                    {/* <div class="circle shadow-sm"><b>+ 2</b></div> */}
+                                <div class="circle">{(this.state.c.Count.resolved - this.state.res_c) !=0 ?<b> + {this.state.c.Count.resolved - this.state.res_c} </b>: null}</div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {resolved} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Resolved</p>
                                     </center>
                                 </button>
                                 <button className = {this.state.isHovered5 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover5} onMouseLeave={this.handleHover5} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"all","All")}>
-                                    {/* <div class="circle shadow-sm"><b>+ 2</b></div> */}
+                                <div class="circle">{(this.state.c.Count.total - this.state.a_c) !=0 ?<b> + {this.state.c.Count.total - this.state.a_c} </b>: null}</div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {all} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>All Grievances</p>

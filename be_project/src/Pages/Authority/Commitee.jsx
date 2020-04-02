@@ -185,8 +185,12 @@ pendingModal = () =>
         pending_modal:!this.state.pending_modal,
         p_c:this.state.c.Count.pending
     })
-    console.log(this.state.p_c)
+    this.state.p_c = this.state.c.Count.pending
+    this.forceUpdate()
+    console.log("c.Count.pending : ",this.state.c.Count.pending)
+    console.log("p_m: ",this.state.p_c)
 }
+
 
 pendingModalProc1 = () =>
 {
@@ -385,7 +389,8 @@ fetch_grievance = (modal,link) => {
 
     if (modal === "forwarded"){
         this.setState({
-           forwarded_modal:true
+           forwarded_modal:true,
+           f_c:this.state.c.Count.forward
         })
         //console.log("Forwarded :",this.state.forwarded_modal)
     }
@@ -546,11 +551,13 @@ componentWillUnmount(){
     clearTimeout(this.intervalID);
     clearTimeout(this.intervalID2);
 }
+
 get_count = () =>
 {
     let res = axios.get("http://127.0.0.1:5000/notify/Committee")
     .then(res=>{
         console.log(res.data)
+        console.log("p_c : ",this.state.p_c)
         this.setState({
             c:res.data
         })
@@ -558,7 +565,6 @@ get_count = () =>
         console.log(error.response)
      }) 
 }
-
 
 
 get_stats = () => {
@@ -615,6 +621,8 @@ put_chainid = (id) =>{
             console.log("flag : ",this.state.flag)
             if(this.state.flag == 0)
             {
+                this.state.c.Count.pending = this.state.c.Count.pending - 1
+                this.forceUpdate() 
                 this.fetch_grievance("pending","_ip");
             } 
             if(this.state.flag == 1)
@@ -636,6 +644,8 @@ put_chainid = (id) =>{
                 this.setState({
                     flag:0
                 })
+                this.state.c.Count.revert = this.state.c.Count.revert - 1
+                this.forceUpdate() 
                 this.fetch_grievance("reverted","_fr/Revert");
             }
            //console.log(res.data);
@@ -728,7 +738,7 @@ to_resolve = () => {
                                         <img className="shadow" style={{width:"80px", height:"80px", borderRadius:"50%"}}src={ray}/>
                                     </td>
                                     <td>
-                                        <h3 className="font_custom" style = {{marginTop:"10px",fontSize:"20px", verticalAlign:"middle", paddingLeft:"10px"}}>Ninad Kheratkar
+                                        <h3 className="font_custom" style = {{marginTop:"10px",fontSize:"20px", verticalAlign:"middle", paddingLeft:"10px"}}>Nishant Dalvi
                                         </h3>
                                     </td>
                                     </tr>
@@ -736,14 +746,6 @@ to_resolve = () => {
                                 <center>
                                     <table className = "font_custom" id="studentDetails" style = {{marginTop: "20px", borderRadius:"10px",background:"#f2f2f2"}}>
                                         <tr style = {{padding:"20px"}}>
-                                            <td >
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Library ID</div>
-                                            </td>
-                                            <td>
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>L-16-10</div>
-                                            </td>
-                                        </tr>
-                                        <tr style = {{padding:"10px"}}>
                                             <td>
                                                 <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>College</div>
                                             </td>
@@ -752,11 +754,19 @@ to_resolve = () => {
                                             </td>
                                         </tr>
                                         <tr style = {{padding:"10px"}}>
-                                            <td>
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Mobile</div>
+                                            <td >
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>College ID</div>
                                             </td>
                                             <td>
-                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>+91-9890358113</div>
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>L-13-25</div>
+                                            </td>
+                                        </tr>
+                                        <tr style = {{padding:"10px"}}>
+                                            <td>
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Level</div>
+                                            </td>
+                                            <td>
+                                                <div className = "font_custom" style = {{fontSize:"16px", fontWeight:"500"}}>Grievance Committee</div>
                                             </td>
                                         </tr>
                                     </table>
@@ -791,7 +801,7 @@ to_resolve = () => {
                                     </center>
                                 </button>
                                 <button className = {this.state.isHovered2 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover2} onMouseLeave={this.handleHover2} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.forward_fetch_calls.bind(this)}>
-                                    <div class="circle"> {(this.state.c.Count.forward - this.state.f_c)!=0 ? <b>+ {this.state.c.Count.forward - this.state.f_c} </b>: null}</div>
+                                    <div class="circle"> {(this.state.c.Count.forward - this.state.f_c) < 0 ? <b>{this.setState({f_c : this.state.c.Count.forward})}{ console.log(this.state.f_c)}</b> : (this.state.c.Count.forward - this.state.f_c) != 0 ?<b>+ {this.state.c.Count.forward - this.state.f_c}</b>:null}</div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {forward} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Forwarded </p>
@@ -809,7 +819,7 @@ to_resolve = () => {
                                     </center>
                                 </button>
                                 <button className = {this.state.isHovered4 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover4} onMouseLeave={this.handleHover4} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.fetch_grievance.bind(this,"resolved","_r")}>
-                                <div class="circle">{(this.state.c.Count.resolved - this.state.res_c) !=0 ?<b> + {this.state.c.Count.resolved - this.state.res_c} </b>: null}</div>
+                                    <div class="circle">{(this.state.c.Count.resolved - this.state.res_c) !=0 ?<b> + {this.state.c.Count.resolved - this.state.res_c} </b>: null}</div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {resolved} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Resolved</p>
