@@ -812,7 +812,7 @@ to_resolve = () => {
                             {/* Row2  */}
                             <div className="justify-content-around mt-4 pb-5 p-2" style = {{display:"flex",flexDirection:"row"}}>
                                 <button className = {this.state.isHovered3 ? "p-2 shadow-lg bg-white" : "p-2 shadow bg-white" } onMouseEnter={this.handleHover3} onMouseLeave={this.handleHover3} style= {{borderRadius:"10px",height:"130px",width:"31%",outline:"none",border:"white"}} onClick = {this.debared_fetch_calls.bind(this)}>
-                                    <div class="circle">{(this.state.c.Count.debarred - this.state.d_c) !=0 ?<b> + {this.state.c.Count.debarred - this.state.d_c} </b>: null}</div>
+                                <div class="circle"> {(this.state.c.Count.forward - this.state.f_c) < 0 ? <b>{this.setState({f_c : this.state.c.Count.debarred})}</b> : (this.state.c.Count.debarred - this.state.d_c) != 0 ?<b>+ {this.state.c.Count.debarred - this.state.d_c}</b>:null}</div>
                                     <center className="mt-2" style = {{width:"100%"}}>
                                         <img src = {debarred} style={{height:"28%",width:"28%"}}/>
                                         <p className = "pt-2 pl-2 pr-2 pb-1 font_custom" style= {{fontSize:"17px",fontWeight:"bold"}}>Debarred </p>
